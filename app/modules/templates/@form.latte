@@ -1,0 +1,113 @@
+{define #form}
+{? Nette\Latte\Macros\FormMacros::renderFormBegin($_form = $form, array('class' => 'form-horizontal'))}
+
+{* errors *}
+{#formErrors}
+	<div n:foreach="$form->errors as $error" class="alert alert-error"><a class="close" data-dismiss="alert">×</a>{$error}</div>
+{/#}
+
+{* controls with group *}
+<fieldset n:foreach="$form->groups as $group" n:if="$group->controls && $group->getOption('visual')" n:block="#formGroup">
+	<legend n:ifset="$group->options['label']">{$group->options['label']}</legend>
+	<p n:ifset="$group->options['description']">{$group->options['description']}</p>
+
+	{#controls}
+	{foreach $group->controls as $control}
+		{var $form = $control->form, $_form = $form}
+		{continueIf $control instanceof Nette\Forms\ISubmitterControl || $control instanceof Nette\Forms\Controls\HiddenField}
+		<div n:if="!$control->getOption('rendered')" id="{$control->htmlId}-pair" n:class="$control->getOption('required')? required, control-group, $control->errors? error, form-group">
+
+			{var $name = $control->lookupPath('Nette\Application\UI\Form'), $controlName => 'control-' . $name}
+			{capture $description}
+				<p class="help-block" n:if="$control instanceof Nette\Forms\Controls\UploadControl">
+					<small>
+						Maximální velikost souboru: {=Nette\Utils\Strings::replace(ini_get('upload_max_filesize'), '/(\D+)/', ' \1')}B
+					</small>
+				</p>
+				<p class="help-block" n:if="$desc = $control->getOption('description')"><small>{$desc}</small></p>
+			{/capture}
+
+			{capture $error}
+				{var $controlErrors = $control->errors}
+				<p class="help-inline" n:if="$error = reset($controlErrors)">{$error}</p>
+			{/capture}
+
+			{#$controlName}
+				{if $control instanceof Nette\Forms\Controls\Button}
+					{#buttonControl}
+						<div class="controls">
+							{input $name, class => 'btn'}
+							{ifset $error}{!$error}{/ifset}
+							{ifset $description}{!$description}{/ifset}
+						</div>
+					{/#}
+				{elseif $control instanceof Nette\Forms\Controls\Checkbox}
+					{#checkboxControl}
+						<div class="controls">
+							{label $name, class => 'checkbox'}{input $name}{$control->label->getText()}{/label}
+							{!$error}
+							{!$description}
+						</div>
+					{/#}
+				{elseif $control instanceof Nette\Forms\Controls\RadioList}
+					{#radioListControl}
+						{label $name, class => 'control-label' /}
+						<div class="controls">
+							{#radioListItems}
+								{foreach $control->items as $key => $value}
+									{var $html = $control->getControl($key), $input = $html[0], $label = $html[1]}
+									{!$label->class('radio')->startTag()}{$input}{$label->getText()}{!$label->class('radio')->endTag()}
+								{/foreach}
+							{/#}
+							{!$error}
+							{!$description}
+						</div>
+					{/#}
+				{else}
+					{#control}
+					{label $name, class => 'control-label' /}
+					<div class="controls">
+						{if $control->controlPrototype->type === 'email'}
+							<div class="input-prepend">
+								<span class="add-on">@</span>{input $name}
+							</div>
+						{else}
+							{input $name class=>form-control}
+						{/if}
+						{!$error}
+						{!$description}
+					</div>
+					{/#}
+				{/if}
+			{/#}
+		</div>
+	{/foreach}
+	{/#}
+</fieldset>
+
+{* controls without group *}
+{include #controls, group => $form}
+
+<div class="form-actions" n:inner-block="#formActions">
+	{var $_form = $form}
+	{foreach $form->getComponents(TRUE, 'Nette\Forms\ISubmitterControl') as $control}
+		{var $name = $control->lookupPath('Nette\Application\UI\Form'), $submitName = 'submit-' . $name}
+		{continueIf $control->getOption('rendered')}
+
+		{#$submitName}
+			{input $name, class => ["btn", $form[$name]->control->class]}
+		{/#}
+	{/foreach}
+	{ifset $cancelUrl}
+		<a href="{$cancelUrl}" class="btn">Storno</a>
+	{/ifset}
+</div>
+
+
+{* end renders hidden inputs *}
+{? Nette\Latte\Macros\FormMacros::renderFormEnd($form)}
+{/define}
+
+{if !isset($render) || $render !== FALSE}
+	{include #form, form => $form}
+{/if}

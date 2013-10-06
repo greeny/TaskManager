@@ -1,0 +1,141 @@
+<!-- TODO fix mail for new server -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+
+	<title>{#title}GameTeam.cz GeoCaching{/#}</title>
+
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap.css">
+	<link rel="stylesheet" href="{$basePath}/css/font-awesome.css">
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui.css">
+	<link rel="stylesheet" href="{$basePath}/css/common.css">
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+	{#head}{/#}
+</head>
+
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" n:href=":Public:Dashboard:default">GeoCaching</a>
+			</div>
+
+			<ul class="nav navbar-nav navbar-left">
+				<li class="dropdown{ifCurrent :Public:Servers:*} active{/ifCurrent}">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-hdd"></span> Servery<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li{ifCurrent :Public:Servers:list} class="active"{/ifCurrent}><a n:href=":Public:Servers:list"><span class="glyphicon glyphicon-list"></span> Seznam serverů</a></li>
+						<li{ifCurrent :Public:Servers:register} class="active"{/ifCurrent}><a n:href=":Public:Servers:register"><span class="glyphicon glyphicon-plus"></span> Registrovat nový server</a></li>
+					</ul>
+				</li>
+				{if $user->isLoggedIn()}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-star"></span> Oblíbené servery <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							{foreach $f = $globalUser->getFavoriteServers() as $fServer}
+								<li><a n:href=":Server:Dashboard:default server => $fServer->server->shortcut"><span class="glyphicon glyphicon-globe"></span> {$fServer->server->name}</a></li>
+							{/foreach}
+							{if !count($f)}
+								<li class="disabled"><a href="#">Žádné servery nemáš oblíbené</a></li>
+							{/if}
+						</ul>
+					</li>
+				{/if}
+
+				{ifset $server}
+					<li class="active dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span> {$server->name}<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li{ifCurrent :Server:Dashboard:default} class="active"{/ifCurrent}><a n:href=":Server:Dashboard:default"><span class="glyphicon glyphicon-th-large"></span> Základní informace</a></li>
+							<li{ifCurrent :Server:Caches:list} class="active"{/ifCurrent}><a n:href=":Server:Caches:list"><i class="icon-archive"></i> Seznam kešek</a></li>
+							<li{ifCurrent :Server:Users:list} class="active"{/ifCurrent}><a n:href=":Server:Users:list"><span class="glyphicon glyphicon-user"></span> Seznam uživatelů</a></li>
+						</ul>
+					</li>
+				{/ifset}
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				{if $user->isLoggedIn()}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {$user->identity->name} <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							{ifset $serverUser}
+								{if $serverUser}
+									<li class="disabled"><a href="#"><span class="glyphicon glyphicon-cog"></span> Server nick: {$serverUser->nick}</a></li>
+								{else}
+									<li><a n:href=":Server:Users:connect"><span class="glyphicon glyphicon-cog"></span> Nastavit server nick</a></li>
+								{/if}
+								<li class="divider"></li>
+							{/ifset}
+							<li{ifCurrent :Public:User:detail} class="active"{/ifCurrent}><a n:href=":Public:User:detail $user->identity->name"><span class="glyphicon glyphicon-credit-card"></span> Zobrazit profil</a></li>
+							<li{ifCurrent :Public:User:settings} class="active"{/ifCurrent}><a n:href=":Public:User:settings"><span class="glyphicon glyphicon-wrench"></span> Nastavení osobních údajů</a></li>
+							<li><a n:href="logout!"><span class="glyphicon glyphicon-log-out"></span> Odhlásit se</a></li>
+						</ul>
+					</li>
+				{else}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> Nepřihlášen <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li{ifCurrent :Public:User:login} class="active"{/ifCurrent}><a n:href=":Public:User:login"><span class="glyphicon glyphicon-log-in"></span> Přihlášení</a></li>
+							<li{ifCurrent :Public:User:register} class="active"{/ifCurrent}><a n:href=":Public:User:register"><span class="glyphicon glyphicon-plus"></span> Registrace</a></li>
+						</ul>
+					</li>
+				{/if}
+			</ul>
+		</div>
+	</div>
+	<div class="container">
+		{#flash}
+			{foreach $flashes as $flash}
+				<div class="alert alert-{$flash->type} alert-dismissable fade in">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					{$flash->message}
+				</div>
+			{/foreach}
+		{/#}
+	</div>
+
+	{#outerContent}{/#}
+	<div class="container">
+		{#content}
+			Obsah nedodán
+		{/#}
+	</div>
+
+
+	{#scripts}
+	<script src="{$basePath}/js/jquery.js"></script>
+	<script src="{$basePath}/js/jquery-ui.js"></script>
+	<script src="{$basePath}/js/netteForms.js"></script>
+	<script src="{$basePath}/js/bootstrap.js"></script>
+	<script src="{$basePath}/js/common.js"></script>
+	{/#}
+</body>
+</html>
+{define paginator}
+	<ul class="pagination">
+		<li n:class="$paginator->isFirst() ? disabled"><a n:href="this $paginator->page-1">&laquo;</a></li>
+		{var $dots = false;}
+		{var $a = array()}
+		{for $j = 1; $j <= 5; $j++}
+			{? $a[] = (int) ($j * $paginator->getLastPage() / 5)}
+		{/for}
+		{for $i = $paginator->getFirstPage(); $i <= $paginator->getLastPage(); $i++}
+			{if $paginator->getPage() == $i}
+				<li class="active"><a n:href="this">{$i}</a></li>{? $dots = true}
+			{elseif in_array($i, $a) || $paginator->getFirstPage() == $i || $paginator->getLastPage() == $i || abs($i - $paginator->getPage()) <= 3}
+				<li><a n:href="this $i">{$i}</a></li>{? $dots = true}
+			{elseif $dots == true}
+				<li class="disabled"><a>...</a></li>{?$dots = false;}
+			{/if}
+		{/for}
+		<li n:class="$paginator->isLast() ? disabled"><a n:href="this $paginator->page+1">&raquo;</a></li>
+		<li><a class="form-paginator">{form paginatorForm, class => 'pull-right'}
+				{input page class => 'form-control form-control-inline-micro'}{input goto class => 'collapse form-control'}
+				{/form}</a></li>
+	</ul>
+
+{/define}

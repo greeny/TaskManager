@@ -1,0 +1,14 @@
+parameters:
+	database:
+		user: root
+		password:
+		server: localhost
+		dbName:
+
+services:
+	nette.mailer: Nette\Mail\SmtpMailer({
+    		host: smtp.example.com
+    		username: root
+    		password:
+    		secure: ssl
+    	})

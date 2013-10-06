@@ -1,0 +1,67 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+#
+# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+parameters:
+
+php:
+	date.timezone: Europe/Prague
+	# zlib.output_compression: yes
+
+nette:
+	application:
+		errorPresenter: Error
+		mapping:
+			*: GeoCaching\*Module\*Presenter
+
+	database:
+		dsn: 'mysql:host=%database.server%;dbname=%database.dbName%'
+		user: %database.user%
+		password: %database.password%
+		options:
+			lazy: yes
+
+	session:
+		expiration: 14 days
+
+database:
+	rowFactory:
+		classes:
+			## rows ##
+			users: GeoCaching\Model\User
+			servers: GeoCaching\Model\Server
+			articles: GeoCaching\Model\Article
+		defaultClass: GeoCaching\Model\ActiveRow
+
+services:
+	## tables ##
+	- GeoCaching\Model\Servers
+	- GeoCaching\Model\ServersComments
+	- GeoCaching\Model\Users
+	- GeoCaching\Model\UserServers
+	- GeoCaching\Model\UserData
+	- GeoCaching\Model\FavoriteServers
+	- GeoCaching\Model\Articles
+
+	## facades ##
+	- GeoCaching\Model\ServerFacade
+	- GeoCaching\Model\UserFacade
+	- GeoCaching\Model\ArticleFacade
+
+	- GeoCaching\Security\Authenticator
+	- GeoCaching\Controls\MailSender
+	- GeoCaching\Routing\RouterFactory
+
+	## serverModule ##
+	serverRowFactory: GeoCaching\Database\ServerRowFactory({
+		caches: 'GeoCaching\ServerModule\Model\Cache'
+		users: 'GeoCaching\ServerModule\Model\User'
+		cacheScores: 'GeoCaching\ServerModule\Model\CacheScore'
+	}, 'GeoCaching\Model\ActiveRow')
+	- GeoCaching\Database\TableFactory(@serverRowFactory, [%database.user%, %database.password%])
+	## FIXME repair username and password ##
+
+
+	router: @GeoCaching\Routing\RouterFactory::createRouter

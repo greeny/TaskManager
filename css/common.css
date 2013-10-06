@@ -1,0 +1,74 @@
+body {
+    padding-top: 70px;
+}
+
+.resizable {
+    border: 2px solid gray;
+}
+
+.nolink, .nolink:hover, .nolink:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+.form-add-margin {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.label-role-moderator {
+    background-color: #5bc0de;
+}
+
+.label-role-admin {
+    background-color: #f0ad4e;
+}
+
+.label-role-owner {
+    background-color: #d9534f;
+}
+
+.label-status-active {
+    background-color: #5cb85c;
+}
+
+.label-status-approval {
+    background-color: #f0ad4e;
+}
+
+.label-status-disabled {
+    background-color: #d9534f;
+}
+.form-control-inline-large {
+    width: 95%;
+    display: inline;
+}
+
+.form-control-inline {
+    width: 50%;
+    display: inline;
+    margin-right: 5%;
+}
+
+.form-control-inline-small {
+    width: 25%;
+    display: inline;
+    margin-right: 5%;
+}
+
+.form-control-inline-mini {
+    width: 10%;
+    display: inline;
+}
+
+.form-control-inline-micro {
+    width: 75px;
+    height: 20px;
+    display: inline;
+}
+
+.form-paginator {
+    margin: 0;
+    padding: 6px 10px 5px 10px !important;
+    border-spacing: 0;
+}
