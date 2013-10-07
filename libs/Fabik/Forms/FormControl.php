@@ -3,7 +3,7 @@
 namespace App\Controls;
 
 use Nette\Application\UI\Control;
-use GeoCaching\Controls\Form;
+use TaskManager\Controls\Form;
 
 /**
  * @author Jan-Sebastian Fabík <honza@fabik.org>

@@ -2,7 +2,7 @@
 
 namespace App\Controls;
 
-use GeoCaching\Controls\Mail;
+use TaskManager\Controls\Mail;
 use	Nette\NotSupportedException;
 use Nette\Application\UI\Control;
 
@@ -18,7 +18,7 @@ abstract class MailControl extends Control
 
 
 
-	/** @return \Geocaching\Controls\Mail */
+	/** @return \TaskManager\Controls\Mail */
 	public function getMail()
 	{
 		$mail = & $this->mail;

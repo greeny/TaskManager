@@ -14,14 +14,7 @@ nette:
 	application:
 		errorPresenter: Error
 		mapping:
-			*: GeoCaching\*Module\*Presenter
-
-	database:
-		dsn: 'mysql:host=%database.server%;dbname=%database.dbName%'
-		user: %database.user%
-		password: %database.password%
-		options:
-			lazy: yes
+			*: TaskManager\*Module\*Presenter
 
 	session:
 		expiration: 14 days
@@ -30,38 +23,22 @@ database:
 	rowFactory:
 		classes:
 			## rows ##
-			users: GeoCaching\Model\User
-			servers: GeoCaching\Model\Server
-			articles: GeoCaching\Model\Article
-		defaultClass: GeoCaching\Model\ActiveRow
+		defaultClass: TaskManager\Model\ActiveRow
 
 services:
 	## tables ##
-	- GeoCaching\Model\Servers
-	- GeoCaching\Model\ServersComments
-	- GeoCaching\Model\Users
-	- GeoCaching\Model\UserServers
-	- GeoCaching\Model\UserData
-	- GeoCaching\Model\FavoriteServers
-	- GeoCaching\Model\Articles
+	- TaskManager\Model\Users
+	- TaskManager\Model\Tasks
+	- TaskManager\Model\Categories
+	- TaskManager\Model\Projects
 
 	## facades ##
-	- GeoCaching\Model\ServerFacade
-	- GeoCaching\Model\UserFacade
-	- GeoCaching\Model\ArticleFacade
+	- TaskManager\Model\UserFacade
+	- TaskManager\Model\TaskFacade
 
-	- GeoCaching\Security\Authenticator
-	- GeoCaching\Controls\MailSender
-	- GeoCaching\Routing\RouterFactory
+	## other ##
+	- TaskManager\Security\Authenticator
+	- TaskManager\Controls\MailSender
 
-	## serverModule ##
-	serverRowFactory: GeoCaching\Database\ServerRowFactory({
-		caches: 'GeoCaching\ServerModule\Model\Cache'
-		users: 'GeoCaching\ServerModule\Model\User'
-		cacheScores: 'GeoCaching\ServerModule\Model\CacheScore'
-	}, 'GeoCaching\Model\ActiveRow')
-	- GeoCaching\Database\TableFactory(@serverRowFactory, [%database.user%, %database.password%])
-	## FIXME repair username and password ##
-
-
-	router: @GeoCaching\Routing\RouterFactory::createRouter
+	- TaskManager\Routing\RouterFactory
+	router: @TaskManager\Routing\RouterFactory::createRouter

@@ -2,7 +2,7 @@
 /**
  * @author Tomáš Blatný
  */
-namespace GeoCaching\Controls;
+namespace TaskManager\Controls;
 
 use Nette\Mail\IMailer;
 use Nette\Object;

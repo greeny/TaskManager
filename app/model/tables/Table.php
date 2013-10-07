@@ -2,7 +2,7 @@
 /**
  * @author Tomáš Blatný
  */
-namespace GeoCaching\Model;
+namespace TaskManager\Model;
 
 use Fabik\Database\Table as FTable;
 

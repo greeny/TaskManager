@@ -2,7 +2,7 @@
 /**
  * @author Tomáš Blatný
  */
-namespace GeoCaching\Controls;
+namespace TaskManager\Controls;
 
 use App\Controls\MailControl;
 

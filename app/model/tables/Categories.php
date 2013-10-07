@@ -4,8 +4,6 @@
  */
 namespace TaskManager\Model;
 
-use Nette\Object;
-
-abstract class Facade extends Object{
-
+class Categories extends Table {
+	protected $name = 'categories';
 }

@@ -4,8 +4,6 @@
  */
 namespace TaskManager\Model;
 
-use Nette\Object;
-
-abstract class Facade extends Object{
-
+class Users extends Table {
+	protected $name = 'users';
 }

@@ -2,7 +2,7 @@
 /**
  * @author Tomáš Blatný
  */
-namespace GeoCaching\Security;
+namespace TaskManager\Security;
 
 use Nette\Object;
 

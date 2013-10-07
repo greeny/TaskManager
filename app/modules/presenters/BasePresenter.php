@@ -1,32 +1,30 @@
 <?php
 
-namespace GeoCaching;
+namespace TaskManager;
 
-use GeoCaching\Controls\MailSender;
-use GeoCaching\Model\UserFacade;
+use Nette\Security\AuthenticationException;
+use TaskManager\Controls\MailSender;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
-use GeoCaching\Templating\Helpers;
+use TaskManager\Model\RegisterException;
+use TaskManager\Model\UserFacade;
+use TaskManager\Templating\Helpers;
 
 /**
  * Base presenter for all application presenters.
  */
 abstract class BasePresenter extends Presenter
 {
+	/** @var \TaskManager\Model\UserFacade */
+	protected $userFacade;
+
 	/** @var MailSender */
 	protected $mailSender;
-
-	/** @var \GeoCaching\Model\UserFacade */
-	protected $userFacade;
 
 	public function beforeRender()
 	{
 		parent::beforeRender();
 		Helpers::prepareTemplate($this->template);
-		if($this->user->isLoggedIn()) {
-			$this->userFacade->updateLastLogin($this->user->id);
-			$this->template->globalUser = $this->userFacade->getUserByName($this->user->identity->name);
-		}
 	}
 
 	public function handleLogout()
@@ -46,11 +44,13 @@ abstract class BasePresenter extends Presenter
 
 	public function flashError($message)
 	{
+		$this->invalidateControl('flashes');
 		return $this->flashMessage($message, 'danger');
 	}
 
 	public function flashSuccess($message)
 	{
+		$this->invalidateControl('flashes');
 		return $this->flashMessage($message, 'success');
 	}
 
@@ -58,20 +58,77 @@ abstract class BasePresenter extends Presenter
 		$this->redirect('this');
 	}
 
-	public function createComponentPaginatorForm()
+	public function createComponentRegisterForm()
 	{
 		$form = new Form();
-		$form->addText('page', 'Přejít na stranu:')
-			->setRequired('Prosím vyplň stranu na kterou chceš přejít.')
-			->setAttribute('placeholder', 'Stránka');
+		$form->addText('nick', 'Nick')
+			->setRequired('Prosím zadej nick.')
+			->addRule($form::PATTERN, 'Nick může obsahovat pouze písmena anglické abecedy, čísla a podtržítko, minimální délka je 3.', '[a-zA-Z0-9_]{3,255}');
 
-		$form->addSubmit('goto', 'Přejít');
-		$form->onSuccess[] = $this->paginatorFormSuccess;
+		$form->addPassword('password', 'Heslo')
+			->setRequired('Prosím zadej heslo.')
+			->addRule($form::PATTERN, 'Heslo musí mít aspoň 3 znaky.', '.{3,}');
+
+		$form->addPassword('password2', 'Ověření hesla')
+			->addRule($form::EQUAL, 'Hesla se musejí shodovat.', $form['password']);
+
+		$form->addText('email', 'Email')
+			->setRequired('Zadejte prosím email.')
+			->addRule($form::EMAIL, 'Zadejte prosím platný email.');
+
+		$form->addSubmit('register', 'Registrovat se')
+			->setAttribute('class', 'btn-primary');
+
+		$form->onSuccess[] = $this->registerFormSuccess;
 		return $form;
 	}
 
-	public function paginatorFormSuccess(Form $form)
+	public function registerFormSuccess(Form $form)
 	{
-		$this->redirect('this', array($form->getValues()->page));
+		try {
+			$this->userFacade->registerUser($form->getValues());
+		} catch(RegisterException $e) {
+			$this->flashError($e->getMessage());
+			$this->refresh();
+		}
+		$this->flashSuccess("Registrace proběhla úspěšně.");
+		$this->redirect("Dashboard:default");
 	}
+
+	public function createComponentLoginForm()
+	{
+		$form = new Form();
+		$form->addText('nick', 'Nick')
+			->setRequired('Prosím zadej nick.')
+			->addRule($form::PATTERN, 'Nick může obsahovat pouze písmena anglické abecedy, čísla a podtržítko, minimální délka je 3.', '[a-zA-Z0-9_]{3,255}');
+
+		$form->addPassword('password', 'Heslo')
+			->setRequired('Prosím zadej heslo.')
+			->addRule($form::PATTERN, 'Heslo musí mít aspoň 3 znaky.', '.{3,}');
+
+		$form->addSubmit('login', 'Přihlásit se')
+			->setAttribute('class', 'btn-primary');
+
+		$form->onSuccess[] = $this->loginFormSuccess;
+		return $form;
+	}
+
+	public function loginFormSuccess(Form $form)
+	{
+		try {
+			$this->user->login($form->getValues()->nick, $form->getValues()->password);
+			$this->flashSuccess('Přihlášení proběhlo úspěšně.');
+			$this->redirect("Dashboard:default");
+		} catch(AuthenticationException $e) {
+			$this->flashError($e->getMessage());
+			$this->refresh();
+		}
+	}
+
+	/*public function redirect($code, $destination = NULL, $args = array())
+	{
+		if(!$this->isAjax()) {
+			parent::redirect($code, $destination, $args);
+		}
+	}*/
 }
