@@ -36,4 +36,19 @@ class TaskFacade extends Facade {
 	{
 		return $this->projects->findAll()->limit(10, ($page - 1) * 10)->order('name ASC');
 	}
+
+	public function getTask($userId, $id)
+	{
+		return $this->tasks->find($id);
+	}
+
+	public function getCategory($userId, $id)
+	{
+		return $this->categories->find($id);
+	}
+
+	public function getProject($userId, $id)
+	{
+		return $this->projects->find($id);
+	}
 }

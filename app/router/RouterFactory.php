@@ -21,22 +21,9 @@ class RouterFactory
 	{
 		$router = new RouteList();
 
-		$router[] = new Route('project[/<id>]', array(
+		$router[] = new Route('<action>[/<id [0-9]>]', array(
 			'module' => 'Public',
 			'presenter' => 'Board',
-			'action' => 'project',
-		));
-
-		$router[] = new Route('category[/<id>]', array(
-			'module' => 'Public',
-			'presenter' => 'Board',
-			'action' => 'category',
-		));
-
-		$router[] = new Route('task[/<id>]', array(
-			'module' => 'Public',
-			'presenter' => 'Board',
-			'action' => 'task',
 		));
 
 		$router[] = new Route('<presenter>/<action>[/<id>]', array(

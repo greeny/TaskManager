@@ -16,24 +16,49 @@ class BoardPresenter extends BasePublicPresenter {
 		$this->taskFacade = $taskFacade;
 	}
 
-	public function renderProject($id = NULL, $page = 1)
+	public function renderProjects($page = 1)
 	{
-		if($id === NULL) {
-			$this->template->projects = $this->taskFacade->getProjects($this->user->id, $page);
+		$this->template->projects = $this->taskFacade->getProjects($this->user->id, $page);
+	}
+
+	public function renderProject($id)
+	{
+		if(!$this->template->project = $this->taskFacade->getProject($id))
+		{
+			$this->flashError('Tento projekt neexistuje.');
+			$this->redirect('projects');
 		}
 	}
 
-	public function renderCategory($id = NULL, $page = 1)
+	public function renderCategories($id = NULL, $page = 1)
 	{
 		if($id === NULL) {
-			$this->template->categories = $this->taskFacade->getCategories($this->user->id, $projectId, $page);
+			$this->template->categories = $this->taskFacade->getCategories($this->user->id, $id, $page);
 		}
 	}
 
-	public function renderTask($id = NULL, $page = 1)
+	public function renderCategory($id)
+	{
+		if(!$this->template->category = $this->taskFacade->getCategory($id))
+		{
+			$this->flashError('Tato kategorie neexistuje.');
+			$this->redirect('projects');
+		}
+	}
+
+	public function renderTasks($id = NULL, $page = 1)
 	{
 		if($id === NULL) {
-			$this->template->tasks = $this->taskFacade->getTasks($this->user->id, $taskId, $page);
+			$this->template->tasks = $this->taskFacade->getTasks($this->user->id, $id, $page);
+		}
+	}
+
+	public function renderTask($id)
+	{
+		if(!$this->template->task = $this->taskFacade->getTask($id))
+		{
+			$this->flashError('Tento úkol neexistuje.');
+			$this->redirect('projects');
 		}
 	}
 }
