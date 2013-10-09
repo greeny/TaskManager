@@ -12,15 +12,18 @@ class DashboardPresenter extends BasePublicPresenter {
 	/** @var \TaskManager\Model\ChatFacade */
 	protected $chatFacade;
 
-	public function renderDefault($page = 1, $chat = false)
+	public function renderDefault($page = 1, $chat = false, $lastTime = 0)
 	{
 		if($chat) {
 			$this->invalidateControl('chat');
+			$this->invalidateControl('chatScript');
 			$this->validateControl('content');
 			$this->validateControl('navbar');
 			$this->validateControl('essentials');
 		}
 		$this->template->chats = $this->chatFacade->getChats($page);
+		$this->template->lastChatTime = $lastTime === 0 ? Time() : $lastTime;
+		$this->template->newLastChatTime = Time();
 	}
 
 	public function inject(ChatFacade $chatFacade)
