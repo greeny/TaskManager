@@ -1,6 +1,6 @@
 <?php
 
-namespace GeoCaching;
+namespace TaskManager;
 
 use Nette,
 	Nette\Diagnostics\Debugger;
