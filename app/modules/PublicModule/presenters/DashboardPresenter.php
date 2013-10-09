@@ -24,6 +24,7 @@ class DashboardPresenter extends BasePublicPresenter {
 		$this->template->chats = $this->chatFacade->getChats($page);
 		$this->template->lastChatTime = $lastTime === 0 ? Time() : $lastTime;
 		$this->template->newLastChatTime = Time();
+		$this->template->page = $page;
 	}
 
 	public function inject(ChatFacade $chatFacade)

@@ -35,12 +35,14 @@
 							</div>
 						</li>
 					{/foreach}
+					<ul class="pager">
+						<li><a n:href="this page => ($page - 1)">Previous</a></li>
+						<li>Strana {$page}</li>
+						<li><a n:href="this page => ($page + 1)">Next</a></li>
+					</ul>
 				{/snippet}
 			</ul>
-			<ul class="pager">
-				<li><a class="previous" href="#" onclick="return false;">Previous</a></li>
-				<li><a class="next" href="#" onclick="return false;">Next</a></li>
-			</ul>
+
 		</div>
 	</div>
 </div>
@@ -48,7 +50,7 @@
 {#scripts}
 {snippet chatScript}
 <script>
-	window.setInterval(function(){
+	window.interval = window.setInterval(function(){
 		$.nette.ajax({
 			url: {plink :Public:Dashboard:default},
 			data: {
@@ -58,25 +60,5 @@
 			}
 		});
 	}, 5000);
-	$('a.previous').on('click', function(){
-		$.nette.ajax({
-			url: {plink :Public:Dashboard:default},
-			data: {
-				page: {? $page = $presenter->getParameter('page'); $page ? $page - 1 : 1 },
-				chat: 1,
-				lastTime: {$newLastChatTime}
-			}
-		});
-	});
-	$('a.next').on('click', function(){
-		$.nette.ajax({
-			url: {plink :Public:Dashboard:default},
-			data: {
-				page: {? $page = $presenter->getParameter('page'); $page ? $page + 1 : 1 },
-				chat: 1,
-				lastTime: {$newLastChatTime}
-			}
-		});
-	});
 </script>
 {/snippet}
