@@ -118,23 +118,22 @@
 				</div>
 			{/if}
 		</div>
-
 	{/snippet content}
 
+	<script src="{$basePath}/js/jquery.js"></script>
+	<script src="{$basePath}/js/jquery-ui.js"></script>
+	<script src="{$basePath}/js/jquery-ui.cs.js"></script>
+	<script src="{$basePath}/js/netteForms.js"></script>
+	<script src="{$basePath}/js/nette.ajax.js"></script>
+	<script src="{$basePath}/js/bootstrap.js"></script>
+	<script src="{$basePath}/js/bootstrap.typeahead.js"></script>
+	<script src="{$basePath}/js/common.js"></script>
+	<script>
+		$(function () {
+			$.nette.init();
+		});
+	</script>
 	{#scripts}
-		<script src="{$basePath}/js/jquery.js"></script>
-		<script src="{$basePath}/js/jquery-ui.js"></script>
-		<script src="{$basePath}/js/jquery-ui.cs.js"></script>
-		<script src="{$basePath}/js/netteForms.js"></script>
-		<script src="{$basePath}/js/nette.ajax.js"></script>
-		<script src="{$basePath}/js/bootstrap.js"></script>
-		<script src="{$basePath}/js/bootstrap.typeahead.js"></script>
-		<script src="{$basePath}/js/common.js"></script>
-		<script>
-			$(function () {
-				$.nette.init();
-			});
-		</script>
 	{/#}
 
 	{snippet essentials}

@@ -12,8 +12,11 @@ class DashboardPresenter extends BasePublicPresenter {
 	/** @var \TaskManager\Model\ChatFacade */
 	protected $chatFacade;
 
-	public function renderDefault($page = 1)
+	public function renderDefault($page = 1, $chat = false)
 	{
+		if($chat) {
+			$this->invalidateControl('chat');
+		}
 		$this->template->chats = $this->chatFacade->getChats($page);
 	}
 
