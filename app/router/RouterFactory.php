@@ -21,7 +21,7 @@ class RouterFactory
 	{
 		$router = new RouteList();
 
-		$router[] = new Route('<action>[/<id [0-9]>]', array(
+		$router[] = new Route('<action>[/<id [0-9]+>]', array(
 			'module' => 'Public',
 			'presenter' => 'Board',
 		));

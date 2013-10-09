@@ -28,17 +28,27 @@ body {
     background-color: #d9534f;
 }
 
-.label-status-active {
-    background-color: #5cb85c;
-}
-
 .label-status-approval {
     background-color: #f0ad4e;
 }
 
-.label-status-disabled {
+.label-status-wontfix {
     background-color: #d9534f;
 }
+
+.label-status-needhelp {
+    background-color: #5bc0de;
+}
+
+.label-status-inprogress {
+    background-color: #428bca;
+}
+
+.label-status-finished {
+    background-color: #5cb85c;
+}
+
+
 .form-control-inline-large {
     width: 95%;
     display: inline;

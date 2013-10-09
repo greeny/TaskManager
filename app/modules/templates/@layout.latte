@@ -24,7 +24,7 @@
 			</div>
 
 			<ul class="nav navbar-nav navbar-left">
-
+				<li n:class="$presenter->isLinkCurrent(':Public:Board:projects') ? active"><a class="ajax" n:href=":Public:Board:projects">Seznam projektů</a></li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
@@ -63,9 +63,9 @@
 		{/snippet}
 	</div>
 
-	{#outerContent}{/#}
-	<div class="container">
-		{snippet content}
+	{snippet content}
+		{#outerContent}{/#}
+		<div class="container">
 			{#content}
 				Obsah nedodán
 			{/#}
@@ -117,21 +117,32 @@
 					</div>
 				</div>
 			{/if}
-		{/snippet content}
-	</div>
+		</div>
+
+	{/snippet content}
 
 	{#scripts}
-	<script src="{$basePath}/js/jquery.js"></script>
-	<script src="{$basePath}/js/jquery-ui.js"></script>
-	<script src="{$basePath}/js/netteForms.js"></script>
-	<script src="{$basePath}/js/nette.ajax.js"></script>
-	<script src="{$basePath}/js/bootstrap.js"></script>
-	<script src="{$basePath}/js/common.js"></script>
-	<script>
-		$(function () {
-			$.nette.init();
-		});
-	</script>
+		<script src="{$basePath}/js/jquery.js"></script>
+		<script src="{$basePath}/js/jquery-ui.js"></script>
+		<script src="{$basePath}/js/jquery-ui.cs.js"></script>
+		<script src="{$basePath}/js/netteForms.js"></script>
+		<script src="{$basePath}/js/nette.ajax.js"></script>
+		<script src="{$basePath}/js/bootstrap.js"></script>
+		<script src="{$basePath}/js/bootstrap.typeahead.js"></script>
+		<script src="{$basePath}/js/common.js"></script>
+		<script>
+			$(function () {
+				$.nette.init();
+			});
+		</script>
 	{/#}
+
+	{snippet essentials}
+		<script>
+			$('a.ajax').on('click', function(){
+				history.pushState({}, '', $(this).attr('href'));
+			});
+		</script>
+	{/snippet}
 </body>
 </html>

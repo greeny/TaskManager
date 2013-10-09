@@ -21,6 +21,16 @@ abstract class BasePresenter extends Presenter
 	/** @var MailSender */
 	protected $mailSender;
 
+	public function startup()
+	{
+		parent::startup();
+		if($this->isAjax()) {
+			$this->invalidateControl('content');
+			$this->invalidateControl('navbar');
+			$this->invalidateControl('essentials');
+		}
+	}
+
 	public function beforeRender()
 	{
 		parent::beforeRender();
@@ -44,13 +54,15 @@ abstract class BasePresenter extends Presenter
 
 	public function flashError($message)
 	{
-		$this->invalidateControl('flashes');
+		if($this->isAjax())
+			$this->invalidateControl('flashes');
 		return $this->flashMessage($message, 'danger');
 	}
 
 	public function flashSuccess($message)
 	{
-		$this->invalidateControl('flashes');
+		if($this->isAjax())
+			$this->invalidateControl('flashes');
 		return $this->flashMessage($message, 'success');
 	}
 
@@ -124,11 +136,4 @@ abstract class BasePresenter extends Presenter
 			$this->refresh();
 		}
 	}
-
-	/*public function redirect($code, $destination = NULL, $args = array())
-	{
-		if(!$this->isAjax()) {
-			parent::redirect($code, $destination, $args);
-		}
-	}*/
 }

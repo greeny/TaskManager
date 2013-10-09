@@ -7,6 +7,7 @@ namespace TaskManager\Templating;
 use Nette\Object;
 use Nette\Templating\Template;
 use Nette\Utils\Html;
+use TaskManager\Model\Task;
 
 class Helpers extends Object {
 
@@ -15,6 +16,24 @@ class Helpers extends Object {
 		$template->registerHelper('role', function($text) {
 			return (in_array($text, array('member'))) ? '' :
 				Html::el('span', array('class' => 'label label-role-'.$text))->setText(ucfirst($text));
+		});
+
+		$template->registerHelper('status', function($text) {
+			if($text == Task::STATUS_ACTIVE) {
+				return "";
+			} else if($text == Task::STATUS_APPROVAL) {
+				$class = 'approval'; $text = 'čeká na ověření';
+			} else if($text == Task::STATUS_FINISHED) {
+				$class = 'finished'; $text = 'hotový';
+			} else if($text == Task::STATUS_IN_PROGRESS) {
+				$class = 'inprogress'; $text = 've vývoji';
+			} else if($text == Task::STATUS_NEED_HELP) {
+				$class = 'needhelp'; $text = 'hledá se pomoc';
+			} else if($text == Task::STATUS_WONT_FIX) {
+				$class = 'wontfix'; $text = 'nejde';
+			}
+
+			return Html::el('span', array('class' => 'label label-status-'.$class))->setText(ucfirst($text));
 		});
 
 		$template->registerHelper('score', function($text) {

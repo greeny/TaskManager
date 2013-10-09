@@ -1,20 +1,18 @@
 {#content}
 <ol class="breadcrumb">
 	<li><a class="ajax" n:href="Dashboard:default">Nástěnka</a></li>
-	<li><a class="ajax" n:href="Board:projects">Seznam projektů</a></li>
-	<li><a class="ajax" n:href="Board:project $project->id">Projekt: {$project->name}</a></li>
-	<li class="active">Kategorie: {$category->name}</li>
+	<li class="active">Seznam projektů</li>
 </ol>
 
 <div class="page-header">
-	<h1>Kategorie: {$category->name}</h1>
+	<h1>Seznam projektů</h1>
 </div>
 
 {if $user->isLoggedIn()}
 	<div class="btn-group">
 		<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Administrace <span class="caret"></span></a>
 		<ul class="dropdown-menu">
-			<li><a data-toggle="modal" href="#addCategory" onclick="fillValues('#addCategory', { name: '', description: '', submit: 'Přidat úkol', header: 'Přidat úkol', id: '', term: '', user: '', group: '' }">Přidat úkol</a></li>
+			<li><a data-toggle="modal" href="#addCategory" onclick="fillValues('#addCategory', { name: '', description: '', submit: 'Přidat projekt', header: 'Přidat projekt', id: '' });">Přidat projekt</a></li>
 		</ul>
 	</div>
 {/if}
@@ -22,22 +20,23 @@
 <table class="table table-responsive">
 	<thead>
 		<tr>
-			<th>Jméno</th>
+			<th>Název projektu</th>
 			<th>Popis</th>
-			<th>Zadavatel</th>
+			<th>Počet kategorií</th>
 			<th n:if="$user->isLoggedIn()">Administrace</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr n:foreach="$tasks as $task">
-			<td><a class="ajax" n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
-			<td>{$task->description|truncate:100}</td>
-			<td>{$task->user->nick}</td>
+		<tr n:foreach="$projects as $project">
+			<td><a class="ajax" n:href="Board:project $project->id">{$project->name}</a></td>
+			<td>{$project->description|truncate:100}</td>
+			<td>{count($project->categories)}</td>
 			<td n:if="$user->isLoggedIn()">
 				<div class="btn-group">
 					<a class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">Akce <span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a n:href="delete! $task->id, 'task'">Smazat</a></li>
+						<li><a data-toggle="modal" href="#addCategory" onclick="fillValues('#addCategory', { name: {$project->name}, description: {$project->description}, submit: 'Upravit projekt', header: 'Upravit projekt {$project->name}', id: {$project->id} });">Upravit</a></li>
+						<li><a n:href="delete! $project->id, 'project'">Smazat</a></li>
 					</ul>
 				</div>
 			</td>
@@ -51,18 +50,14 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Nový úkol</h4>
+					<h4 class="modal-title">Nový projekt</h4>
 				</div>
 
-				{form addTaskForm, class => 'ajax'}
+				{form addProjectForm, class => 'ajax'}
 					<div class="modal-body">
 						<div class="form-group">{label name}{/label}{input name, class => 'form-control'}</div>
 						<div class="form-group">{label description}{/label}{input description, class => 'form-control'}</div>
-						<div class="form-group">{label term}{/label}{input term, class => 'form-control input-datepicker'}</div>
-						<div class="form-group">{label user}{/label}{input user, class => 'form-control'}</div>
-						<div class="form-group">{label group}{/label}{input group, class => 'form-control'}</div>
 					</div>
-					{input category_id}
 
 					<div class="modal-footer">
 						{input submit, class => 'btn btn-primary'}

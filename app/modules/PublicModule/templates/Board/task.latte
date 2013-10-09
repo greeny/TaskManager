@@ -1,0 +1,58 @@
+{#content}
+<ol class="breadcrumb">
+	<li><a class="ajax" n:href="Dashboard:default">Nástěnka</a></li>
+	<li><a class="ajax" n:href="Board:projects">Seznam projektů</a></li>
+	<li><a class="ajax" n:href="Board:project $project->id">Projekt: {$project->name}</a></li>
+	<li><a class="ajax" n:href="Board:category $category->id">Kategorie: {$category->name}</a></li>
+	<li class="active">Úkol: {$task->name}</li>
+</ol>
+
+<div class="page-header">
+	<h1>Úkol: {$task->name}</h1>
+</div>
+
+<div class="row">
+	<div class="col-lg-6">
+		<table class="table table-responsive">
+			<thead>
+				<tr>
+					<td><b>Zadavatel</b></td>
+					<td>{? $u = $task->user}{$u->nick} {$u->role|role}</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><b>Přiřazený uživatel</b></td>
+					<td>{if $u = $task->assigned_user}{$u->nick} {$u->role|role}{else}-{/if}</td>
+				</tr>
+				<tr>
+					<td><b>Přiřazená skupina</b></td>
+					<td>{if $g = $task->assigned_group}{$g->name}{else}-{/if}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="col-lg-6">
+		<table class="table table-responsive">
+			<thead>
+				<tr>
+					<td><b>Termín</b></td>
+					<td>{$task->term->format('d.m.Y')}</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><b>Status</b></td>
+					<td>{$task->status|status}</td>
+				</tr>
+				<tr>
+					<td><b>Úkol zamčen</b></td>
+					<td>{if $task->lock}Ano{else}Ne{/if}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{$task->description}

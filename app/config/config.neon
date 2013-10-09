@@ -23,11 +23,15 @@ database:
 	rowFactory:
 		classes:
 			## rows ##
+			projects: TaskManager\Model\Project
+			categories: TaskManager\Model\Category
+			tasks: TaskManager\Model\Task
 		defaultClass: TaskManager\Model\ActiveRow
 
 services:
 	## tables ##
 	- TaskManager\Model\Users
+	- TaskManager\Model\Groups
 	- TaskManager\Model\Tasks
 	- TaskManager\Model\Categories
 	- TaskManager\Model\Projects

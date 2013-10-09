@@ -29,7 +29,7 @@ class Authenticator extends Object implements IAuthenticator {
 		if(PasswordHasher::hash($username . '@' . $password, $user->salt) !== $user->password) {
 			throw new AuthenticationException("Špatné heslo.", Authenticator::INVALID_CREDENTIAL);
 		}
-		if($user->verified != 0) {
+		if($user->verified == 0) {
 			throw new AuthenticationException("Uživatel nemá ověřený účet.", Authenticator::FAILURE);
 		}
 		$user = ArrayHash::from($user->toArray());
