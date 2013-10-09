@@ -16,6 +16,9 @@ class DashboardPresenter extends BasePublicPresenter {
 	{
 		if($chat) {
 			$this->invalidateControl('chat');
+			$this->validateControl('content');
+			$this->validateControl('navbar');
+			$this->validateControl('essentials');
 		}
 		$this->template->chats = $this->chatFacade->getChats($page);
 	}

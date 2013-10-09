@@ -16,7 +16,7 @@
 	<div class="col-lg-8">
 
 	</div>
-	{snippet chat}
+
 	<div class="col-lg-4">
 
 			<div class="panel panel-primary">
@@ -28,25 +28,27 @@
 					{/form}
 				</div>
 
-				<ul class="list-group" n:foreach="$chats as $chat">
-					<li class="list-group-item">
-						<div class="list-group-item-heading">
-							<span class="glyphicon glyphicon-user"></span>
-							<a n:href="User:detail $chat->user->nick">{$chat->user->nick}</a>
-							{$chat->user->role|role}
-							<span class="pull-right">
-								<span class="glyphicon glyphicon-time"></span> {$chat->time|time}
-							</span>
-						</div>
-						<div class="list-group-item-text">
-							{$chat->message}
-						</div>
-					</li>
+				<ul class="list-group">
+					{snippet chat}
+						{foreach $chats as $chat}
+							<li class="list-group-item">
+								<div class="list-group-item-heading">
+									<span class="glyphicon glyphicon-user"></span>
+									<a n:href="User:detail $chat->user->nick">{$chat->user->nick}</a>
+									{$chat->user->role|role}
+									<span class="pull-right">
+									<span class="glyphicon glyphicon-time"></span> {$chat->time|time}
+								</span>
+									<div class="list-group-item-text">{$chat->message}</div>
+								</div>
+							</li>
+						{/foreach}
+					{/snippet}
 				</ul>
 			</div>
 
 	</div>
-	{/snippet}
+
 
 
 	{#scripts}

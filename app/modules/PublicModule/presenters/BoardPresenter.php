@@ -22,21 +22,21 @@ class BoardPresenter extends BasePublicPresenter {
 		$this->template->projects = $this->taskFacade->getProjects($this->user->id, $page);
 	}
 
-	public function renderProject($id, $page = 1)
+	public function renderProject($id, $page = 1, $noerror = false)
 	{
 		if(!$this->template->project = $project = $this->taskFacade->getProject($this->user->id, $id))
 		{
-			$this->flashError('Tento projekt neexistuje.');
+			if(!$noerror) $this->flashError('Tento projekt neexistuje.');
 			$this->redirect('projects');
 		}
 		$this->template->categories = $this->taskFacade->getCategories($this->user->id, $project->id, $page);
 	}
 
-	public function renderCategory($id, $page = 1)
+	public function renderCategory($id, $page = 1, $noerror = false)
 	{
 		if(!$this->template->category = $category = $this->taskFacade->getCategory($this->user->id, $id))
 		{
-			$this->flashError('Tato kategorie neexistuje.');
+			if(!$noerror) $this->flashError('Tato kategorie neexistuje.');
 			$this->redirect('projects');
 		}
 		$this->template->tasks = $this->taskFacade->getTasks($this->user->id, $category->id, $page);
@@ -44,11 +44,11 @@ class BoardPresenter extends BasePublicPresenter {
 		$this->template->userArray = $this->taskFacade->getUsersArray();
 	}
 
-	public function renderTask($id)
+	public function renderTask($id, $noerror = false)
 	{
 		if(!$this->template->task = $task = $this->taskFacade->getTask($this->user->id, $id))
 		{
-			$this->flashError('Tento úkol neexistuje.');
+			if(!$noerror) $this->flashError('Tento úkol neexistuje.');
 			$this->redirect('projects');
 		}
 		$this->template->category = $category = $task->getParent();
@@ -166,6 +166,6 @@ class BoardPresenter extends BasePublicPresenter {
 			$this->taskFacade->deleteTask($id);
 			$this->flashSuccess('Úkol byl smazán.');
 		}
-		$this->refresh();
+		$this->redirect('this', array('noerror' => 1));
 	}
 }
