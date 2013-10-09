@@ -5,8 +5,23 @@
 namespace TaskManager\PublicModule;
 
 use Nette\Application\UI\Form;
+use TaskManager\Model\ChatFacade;
 
 class DashboardPresenter extends BasePublicPresenter {
+
+	/** @var \TaskManager\Model\ChatFacade */
+	protected $chatFacade;
+
+	public function renderDefault($page = 1)
+	{
+		$this->template->chats = $this->chatFacade->getChats($page);
+	}
+
+	public function inject(ChatFacade $chatFacade)
+	{
+		$this->chatFacade = $chatFacade;
+	}
+
 	public function createComponentSendChatMessageForm()
 	{
 		$form = new Form;
@@ -22,6 +37,14 @@ class DashboardPresenter extends BasePublicPresenter {
 
 	public function sendChatMessageFormSuccess(Form $form)
 	{
-		$v = $form->getValues();
+		if($this->user->isLoggedIn()) {
+			$v = $form->getValues();
+			$this->chatFacade->addChat($this->user->id, $v->message);
+			$this->flashSuccess('Zpráva byla přidána');
+			$this->refresh();
+		} else {
+			$this->flashError('Pro psaní do chatu se musíš přihlásit.');
+			$this->refresh();
+		}
 	}
 }

@@ -32,6 +32,7 @@ services:
 	## tables ##
 	- TaskManager\Model\Users
 	- TaskManager\Model\Groups
+	- TaskManager\Model\Chats
 	- TaskManager\Model\Tasks
 	- TaskManager\Model\Categories
 	- TaskManager\Model\Projects
@@ -39,6 +40,7 @@ services:
 	## facades ##
 	- TaskManager\Model\UserFacade
 	- TaskManager\Model\TaskFacade
+	- TaskManager\Model\ChatFacade
 
 	## other ##
 	- TaskManager\Security\Authenticator
