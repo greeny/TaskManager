@@ -12,3 +12,24 @@
 	</div>
 </div>
 {/#}{#content}
+<div class="row">
+	<div class="col-lg-8">
+
+	</div>
+	<div class="col-lg-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">ChatBox</div>
+			<div class="panel-body">
+				{form sendChatMessageForm}
+					<div class="form-group">{label message}{/label}{control message, class => 'form-control'}</div>
+					{control send, class => 'form-control'}
+				{/form}
+			</div>
+			<ul class="list-group">
+				<li class="list-group-item">Test</li>
+				<li class="list-group-item">Test</li>
+				<li class="list-group-item">Test</li>
+			</ul>
+		</div>
+	</div>
+</div>
