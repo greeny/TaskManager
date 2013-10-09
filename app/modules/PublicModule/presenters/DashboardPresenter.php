@@ -35,7 +35,7 @@ class DashboardPresenter extends BasePublicPresenter {
 	{
 		$form = new Form;
 
-		$form->addTextArea('message', 'Zpráva:')
+		$form->addText('message', 'Zpráva:')
 			->setRequired('Prosím vyplň zprávu.');
 
 		$form->addSubmit('send', 'Poslat');

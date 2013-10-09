@@ -1,17 +1,8 @@
-{#outerContent}
-<div class="container">
-	<ol class="breadcrumb">
-		<li class="active">Nástěnka</li>
-	</ol>
-</div>
+{#content}
+<ol class="breadcrumb">
+	<li class="active">Nástěnka</li>
+</ol>
 
-<div class="jumbotron">
-	<div class="container">
-		<h1>Úkolníček</h1>
-		<p>vše na jednom místě</p>
-	</div>
-</div>
-{/#}{#content}
 <div class="row">
 	<div class="col-lg-8">
 
@@ -20,12 +11,14 @@
 	<div class="col-lg-4">
 		<div class="panel panel-primary">
 			<div class="panel-heading">ChatBox</div>
-			<div class="panel-body">
-				{form sendChatMessageForm}
-					<div class="form-group">{label message}{/label}{input message, class => 'form-control'}</div>
-					{input send, class => 'form-control btn btn-primary'}
-				{/form}
-			</div>
+			{if $user->isLoggedIn()}
+				<div class="panel-body">
+					{form sendChatMessageForm}
+						<div class="form-group">{label message}{/label}{input message, class => 'form-control'}</div>
+						{input send, class => 'form-control btn btn-primary'}
+					{/form}
+				</div>
+			{/if}
 
 			<ul class="list-group">
 				{snippet chat}
@@ -44,6 +37,10 @@
 					{/foreach}
 				{/snippet}
 			</ul>
+			<ul class="pager">
+				<li><a class="previous" href="#" onclick="return false;">Previous</a></li>
+				<li><a class="next" href="#" onclick="return false;">Next</a></li>
+			</ul>
 		</div>
 	</div>
 </div>
@@ -61,5 +58,25 @@
 			}
 		});
 	}, 5000);
+	$('a.previous').on('click', function(){
+		$.nette.ajax({
+			url: {plink :Public:Dashboard:default},
+			data: {
+				page: {? $page = $presenter->getParameter('page'); $page ? $page - 1 : 1 },
+				chat: 1,
+				lastTime: {$newLastChatTime}
+			}
+		});
+	});
+	$('a.next').on('click', function(){
+		$.nette.ajax({
+			url: {plink :Public:Dashboard:default},
+			data: {
+				page: {? $page = $presenter->getParameter('page'); $page ? $page + 1 : 1 },
+				chat: 1,
+				lastTime: {$newLastChatTime}
+			}
+		});
+	});
 </script>
 {/snippet}
