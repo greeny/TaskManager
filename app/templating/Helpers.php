@@ -18,6 +18,15 @@ class Helpers extends Object {
 				Html::el('span', array('class' => 'label label-role-'.$text))->setText(ucfirst($text));
 		});
 
+		$template->registerHelper('nl2br', function($text) {
+			$parts = explode(PHP_EOL, $text);
+			$return = Html::el('div');
+			foreach($parts as $part) {
+				$return->setHtml($return->getHtml() . $part . Html::el('br'));
+			}
+			return $return;
+		});
+
 		$template->registerHelper('status', function($text) {
 			if($text == Task::STATUS_ACTIVE) {
 				return "";
