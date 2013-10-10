@@ -136,4 +136,27 @@ abstract class BasePresenter extends Presenter
 			$this->refresh();
 		}
 	}
+
+	public function createComponentPaginatorForm()
+	{
+		$form = new Form();
+		$form->addText('page', 'Přejít na stranu:')
+			->setRequired('Prosím vyplň stranu na kterou chceš přejít.')
+			->setAttribute('placeholder', 'Stránka');
+
+		$form->addHidden('maxPage');
+		$form->addSubmit('goto', 'Přejít');
+		$form->onSuccess[] = $this->paginatorFormSuccess;
+		return $form;
+	}
+
+	public function paginatorFormSuccess(Form $form)
+	{
+		$v = $form->getValues();
+		if($v->maxPage >= $v->page) {
+			$this->redirect('this', array('page' => $v->page));
+		} else {
+			$this->redirect('this', array('page' => $v->maxPage));
+		}
+	}
 }

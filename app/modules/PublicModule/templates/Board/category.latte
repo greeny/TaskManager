@@ -45,6 +45,8 @@
 	</tbody>
 </table>
 
+{include #paginator, paginator => $paginator}
+
 {if $user->isLoggedIn()}
 	<div class="modal fade" id="addCategory">
 		<div class="modal-dialog">

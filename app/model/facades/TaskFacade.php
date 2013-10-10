@@ -33,19 +33,19 @@ class TaskFacade extends Facade {
 		$this->groups = $groups;
 	}
 
-	public function getTasks($userId, $categoryId, $page = 1)
+	public function getTasks($userId, $categoryId)
 	{
-		return $this->tasks->findBy('category_id', $categoryId)->limit(10, ($page - 1) * 10)->order('name ASC');
+		return $this->tasks->findBy('category_id', $categoryId)->order('name ASC');
 	}
 
-	public function getCategories($userId, $projectId, $page = 1)
+	public function getCategories($userId, $projectId)
 	{
-		return $this->categories->findBy('project_id', $projectId)->limit(10, ($page - 1) * 10)->order('name ASC');
+		return $this->categories->findBy('project_id', $projectId)->order('name ASC');
 	}
 
-	public function getProjects($userId, $page = 1)
+	public function getProjects($userId)
 	{
-		return $this->projects->findAll()->limit(10, ($page - 1) * 10)->order('name ASC');
+		return $this->projects->findAll()->order('name ASC');
 	}
 
 	public function getTask($userId, $id)

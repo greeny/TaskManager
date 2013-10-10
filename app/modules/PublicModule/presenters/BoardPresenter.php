@@ -5,6 +5,7 @@
 namespace TaskManager\PublicModule;
 
 use Nette\Application\UI\Form;
+use Nette\Utils\Paginator;
 use TaskManager\Model\TaskFacade;
 
 class BoardPresenter extends BasePublicPresenter {
@@ -19,27 +20,33 @@ class BoardPresenter extends BasePublicPresenter {
 
 	public function renderProjects($page = 1)
 	{
-		$this->template->projects = $this->taskFacade->getProjects($this->user->id, $page);
+		$paginator = $this->createPaginator($page);
+		$paginator->itemCount = count($projects = $this->taskFacade->getProjects($this->user->id));
+		$this->template->projects = $projects->limit($paginator->length, $paginator->offset);
 	}
 
 	public function renderProject($id, $page = 1, $noerror = false)
 	{
+		$paginator = $this->createPaginator($page);
 		if(!$this->template->project = $project = $this->taskFacade->getProject($this->user->id, $id))
 		{
 			if(!$noerror) $this->flashError('Tento projekt neexistuje.');
 			$this->redirect('projects');
 		}
-		$this->template->categories = $this->taskFacade->getCategories($this->user->id, $project->id, $page);
+		$paginator->itemCount = count($categories = $this->taskFacade->getCategories($this->user->id, $project->id));
+		$this->template->categories = $categories->limit($paginator->length, $paginator->offset);
 	}
 
 	public function renderCategory($id, $page = 1, $noerror = false)
 	{
+		$paginator = $this->createPaginator($page);
 		if(!$this->template->category = $category = $this->taskFacade->getCategory($this->user->id, $id))
 		{
 			if(!$noerror) $this->flashError('Tato kategorie neexistuje.');
 			$this->redirect('projects');
 		}
-		$this->template->tasks = $this->taskFacade->getTasks($this->user->id, $category->id, $page);
+		$paginator->itemCount = count($tasks = $this->taskFacade->getTasks($this->user->id, $category->id));
+		$this->template->tasks = $tasks->limit($paginator->length, $paginator->offset);
 		$this->template->project = $category->getParent();
 		$this->template->userArray = $this->taskFacade->getUsersArray();
 	}
@@ -167,5 +174,13 @@ class BoardPresenter extends BasePublicPresenter {
 			$this->flashSuccess('Úkol byl smazán.');
 		}
 		$this->redirect('this', array('noerror' => 1));
+	}
+
+	protected function createPaginator($page = 1)
+	{
+		$paginator = new Paginator();
+		$paginator->page = $page;
+		$paginator->itemsPerPage = 15;
+		return $this->template->paginator = $paginator;
 	}
 }

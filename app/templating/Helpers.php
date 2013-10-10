@@ -19,15 +19,11 @@ class Helpers extends Object {
 		});
 
 		$template->registerHelper('nl2br', function($text) {
-			$parts = explode(PHP_EOL, $text);
-			$return = Html::el('div');
-			foreach($parts as $part) {
-				$return->setHtml($return->getHtml() . $part . Html::el('br'));
-			}
-			return $return;
+			return Html::el('div')->setHtml(nl2br(\Nette\Templating\Helpers::escapeHtml($text)));
 		});
 
 		$template->registerHelper('status', function($text) {
+			$class = '';
 			if($text == Task::STATUS_ACTIVE) {
 				return "";
 			} else if($text == Task::STATUS_APPROVAL) {
