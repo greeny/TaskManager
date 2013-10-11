@@ -151,7 +151,6 @@
 		{var $dots = false;}
 		{var $a = array()}
 		{for $j = 1; $j <= 5; $j++}
-			{dump $paginator}
 			{? $a[] = (int) ($j * $paginator->getLastPage() / 5)}
 		{/for}
 		{for $i = $paginator->getFirstPage(); $i <= $paginator->getLastPage(); $i++}
