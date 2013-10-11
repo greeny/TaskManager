@@ -17,7 +17,7 @@
 			<thead>
 				<tr>
 					<td><b>Zadavatel</b></td>
-					<td>{? $u = $task->user}{$u->nick} {$u->role|role}</td>
+					<td>{? $u = $task->ref('users', 'user_id')}{$u->nick} {$u->role|role}</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -38,7 +38,7 @@
 			<thead>
 				<tr>
 					<td><b>Termín</b></td>
-					<td>{$task->term->format('d.m.Y')}</td>
+					<td>{$task->term|date}</td>
 				</tr>
 			</thead>
 			<tbody>

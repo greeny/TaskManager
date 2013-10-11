@@ -45,8 +45,7 @@ class BoardPresenter extends BasePublicPresenter {
 			if(!$noerror) $this->flashError('Tato kategorie neexistuje.');
 			$this->redirect('projects');
 		}
-		$paginator->itemCount = count($tasks = $this->taskFacade->getTasks($this->user->id, $category->id));
-		$this->template->tasks = $tasks->limit($paginator->length, $paginator->offset);
+		$this->template->tasks = $this->taskFacade->getTasks($this->user->id, $category->id, $paginator);
 		$this->template->project = $category->getParent();
 		$this->template->userArray = $this->taskFacade->getUsersArray();
 	}

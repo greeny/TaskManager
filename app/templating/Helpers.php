@@ -4,6 +4,7 @@
  */
 namespace TaskManager\Templating;
 
+use Nette\DateTime;
 use Nette\Object;
 use Nette\Templating\Template;
 use Nette\Utils\Html;
@@ -19,7 +20,7 @@ class Helpers extends Object {
 		});
 
 		$template->registerHelper('nl2br', function($text) {
-			return Html::el('div')->setHtml(nl2br(\Nette\Templating\Helpers::escapeHtml($text)));
+			return Html::el('')->setHtml(nl2br(\Nette\Templating\Helpers::escapeHtml($text)));
 		});
 
 		$template->registerHelper('status', function($text) {
@@ -62,6 +63,10 @@ class Helpers extends Object {
 		$template->registerHelper('time', function($text) {
 			$text = (int) $text;
 			return date('j.n.Y G:i:s', $text);
+		});
+
+		$template->registerHelper('date', function($dateTime) {
+			return (!$dateTime ? 'nenastaven' : $dateTime->format('j.n.Y'));
 		});
 
 		$template->registerHelper('data', function($text, $type) {

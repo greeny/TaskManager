@@ -55,7 +55,7 @@
 			data: {
 				page: {$presenter->getParameter('page') ?: 1 },
 				chat: 1,
-				lastTime: {$newLastChatTime}
+				lastTime: (new Date()).getTime() / 1000
 			}
 		});
 	}, 5000);

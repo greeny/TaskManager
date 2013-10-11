@@ -6,6 +6,7 @@ namespace TaskManager\Model;
 
 use Nette\ArrayHash;
 use Nette\DateTime;
+use Nette\Utils\Paginator;
 
 class TaskFacade extends Facade {
 
@@ -33,9 +34,17 @@ class TaskFacade extends Facade {
 		$this->groups = $groups;
 	}
 
-	public function getTasks($userId, $categoryId)
+	public function getTasks($userId, $categoryId, Paginator $paginator)
 	{
-		return $this->tasks->findBy('category_id', $categoryId)->order('name ASC');
+		$sql = " FROM `tasks` `t`
+			LEFT JOIN `task_permissions` `tp` ON `t`.`id` = `tp`.`task_id`
+			WHERE (`t`.`user_id` = ".(int)$userId." OR `t`.`assigned_user_id` = ".(int)$userId." OR `tp`.`user_id` = ".(int)$userId.")
+			AND `category_id` = ".(int)$categoryId."
+			ORDER BY `name` ASC";
+		$paginator->itemCount = $this->tasks->query(
+			"SELECT COUNT(*) ".$sql)->fetchField(0);
+		$ids = $this->tasks->query("SELECT `t`.* $sql LIMIT {$paginator->offset}, {$paginator->length}")->fetchPairs('id', 'id');
+		return $this->tasks->findBy('id', array_values($ids))->order('name ASC');
 	}
 
 	public function getCategories($userId, $projectId)
@@ -104,7 +113,7 @@ class TaskFacade extends Facade {
 			'assigned_user_id' => $user ? $user->id : NULL,
 			'assigned_group_id' => $group ? $group->id : NULL,
 			'status' => Task::STATUS_ACTIVE,
-			'term' => DateTime::createFromFormat('d.m.Y', $data->term),
+			'term' => ($data->term === '' ? NULL : DateTime::createFromFormat('d.m.Y', $data->term)),
 		);
 		if($data->id) {
 			$row = $this->tasks->find($data->id);
