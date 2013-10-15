@@ -150,4 +150,9 @@ class TaskFacade extends Facade {
 	{
 		return $this->groups->findAll()->order('name ASC')->fetchPairs('id', 'name');
 	}
+
+	public function getUsersTasks($userId)
+	{
+		return $this->tasks->findBy('assigned_user_id', $userId)->order('name ASC');
+	}
 }

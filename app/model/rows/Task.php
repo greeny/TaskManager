@@ -17,4 +17,9 @@ class Task extends ActiveRow {
 	{
 		return $this->ref('categories', 'category_id');
 	}
+
+	public function getOwner()
+	{
+		return $this->ref('users', 'user_id');
+	}
 }

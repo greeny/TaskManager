@@ -79,14 +79,15 @@
 					<div class="modal-body">
 						<div class="form-group">{label name}{/label}{input name, class => 'form-control', value => $task->name}</div>
 						<div class="form-group">{label description}{/label}{? echo $_form["description"]->getControl()->addAttributes(array('class' => 'form-control'))->setHtml($task->description)}</div>
-						<div class="form-group">{label term}{/label}{input term, class => 'form-control input-datepicker', value => $task->term}</div>
-						<div class="form-group">{label user}{/label}{input user, class => 'form-control', value => $task->assigned_user_id}</div>
-						<div class="form-group">{label group}{/label}{input group, class => 'form-control', value => $task->assigned_group_id}</div>
+						<div class="form-group">{label term}{/label}{input term, class => 'form-control input-datepicker', value => ($task->term ? $task->term->format('d.m.Y') : '')}</div>
+						<div class="form-group">{label user}{/label}{? echo $_form["user"]->setValue($task->assigned_user_id)->getControl()->addAttributes(array('class' => 'form-control'))}</div>
+						<div class="form-group">{label group}{/label}{? echo $_form["group"]->setValue($task->assigned_group_id)->getControl()->addAttributes(array('class' => 'form-control'))}</div>
 					</div>
-				{input category_id}
+				{input category_id, value => $task->category_id}
+				{input id, value => $task->id}
 
 					<div class="modal-footer">
-						{input submit, class => 'btn btn-primary'}
+						{input submit, class => 'btn btn-primary', value => 'Upravit úkol'}
 					</div>
 				{/form}
 			</div>
