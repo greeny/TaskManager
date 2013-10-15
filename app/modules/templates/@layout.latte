@@ -167,7 +167,7 @@
 		<li n:class="$paginator->isLast() ? disabled"><a n:href="this page => $paginator->page+1">&raquo;</a></li>
 		<li>
 			<a class="form-paginator">{form paginatorForm, class => 'pull-right'}{? $_form['maxPage']->setValue($paginator->getLastPage())}
-				{input maxPage}{input page class => 'form-control form-control-inline-micro'}{input goto class => 'collapse form-control'}
+				{input maxPage}{input page class => 'form-control form-control-inline-micro', style=> 'padding: 0px; text-align: center;'}{input goto class => 'collapse form-control'}
 				{/form}
 			</a>
 		</li>
