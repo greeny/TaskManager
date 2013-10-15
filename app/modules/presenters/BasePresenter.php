@@ -28,6 +28,7 @@ abstract class BasePresenter extends Presenter
 			$this->invalidateControl('content');
 			$this->invalidateControl('navbar');
 			$this->invalidateControl('essentials');
+			$this->invalidateControl('scripts');
 		}
 	}
 

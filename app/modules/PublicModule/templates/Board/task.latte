@@ -11,6 +11,15 @@
 	<h1>Úkol: {$task->name}</h1>
 </div>
 
+{if $user->isLoggedIn() && $user->getIdentity()->role !== "member"}
+	<div class="btn-group">
+		<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Administrace <span class="caret"></span></a>
+		<ul class="dropdown-menu">
+			<li><a data-toggle="modal" href="#addCategory">Upravit</a></li>
+		</ul>
+	</div>
+{/if}
+
 <div class="row">
 	<div class="col-lg-6">
 		<table class="table table-responsive">
@@ -56,3 +65,31 @@
 </div>
 
 {$task->description|nl2br}
+
+{if $user->isLoggedIn() && $user->getIdentity()->role !== "member"}
+	<div class="modal fade" id="addCategory">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Upravit úkol</h4>
+				</div>
+
+				{form addTaskForm, class => 'ajax'}
+					<div class="modal-body">
+						<div class="form-group">{label name}{/label}{input name, class => 'form-control', value => $task->name}</div>
+						<div class="form-group">{label description}{/label}{? echo $_form["description"]->getControl()->addAttributes(array('class' => 'form-control'))->setHtml($task->description)}</div>
+						<div class="form-group">{label term}{/label}{input term, class => 'form-control input-datepicker', value => $task->term}</div>
+						<div class="form-group">{label user}{/label}{input user, class => 'form-control', value => $task->assigned_user_id}</div>
+						<div class="form-group">{label group}{/label}{input group, class => 'form-control', value => $task->assigned_group_id}</div>
+					</div>
+				{input category_id}
+
+					<div class="modal-footer">
+						{input submit, class => 'btn btn-primary'}
+					</div>
+				{/form}
+			</div>
+		</div>
+	</div>
+{/if}

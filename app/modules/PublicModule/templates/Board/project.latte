@@ -9,7 +9,7 @@
 	<h1>Projekt: {$project->name}</h1>
 </div>
 
-{if $user->isLoggedIn()}
+{if $user->isLoggedIn() && $user->getIdentity()->role !== "member"}
 	<div class="btn-group">
 		<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Administrace <span class="caret"></span></a>
 		<ul class="dropdown-menu">
@@ -24,15 +24,15 @@
 			<th>Jméno</th>
 			<th>Popis</th>
 			<th>Počet úkolů</th>
-			<th n:if="$user->isLoggedIn()">Administrace</th>
+			<th n:if="$user->isLoggedIn() && $user->getIdentity()->role !== 'member'">Administrace</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr n:foreach="$categories as $category">
 			<td><a class="ajax" n:href="Board:category $category->id">{$category->name}</a></td>
 			<td>{$category->description|truncate:100}</td>
-			<td>{count($category->tasks)}</td>
-			<td n:if="$user->isLoggedIn()">
+			<td>{$category->getTasksCount($user->id)}</td>
+			<td n:if="$user->isLoggedIn() && $user->getIdentity()->role !== 'member'">
 				<div class="btn-group">
 					<a class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">Akce <span class="caret"></span></a>
 					<ul class="dropdown-menu">
@@ -47,7 +47,7 @@
 
 {include #paginator, paginator => $paginator}
 
-{if $user->isLoggedIn()}
+{if $user->isLoggedIn() && $user->getIdentity()->role !== "member"}
 	<div class="modal fade" id="addCategory">
 		<div class="modal-dialog">
 			<div class="modal-content">
