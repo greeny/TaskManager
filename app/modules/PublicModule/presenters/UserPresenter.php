@@ -22,6 +22,13 @@ class UserPresenter extends BasePublicPresenter {
 		$this->taskFacade = $taskFacade;
 	}
 
+	public function renderDetail($id)
+	{
+		if(!$this->template->u = $this->userFacade->getUserById($id)) {
+			$this->redirect("Dashboard:default");
+		}
+	}
+
 	public function renderTasks()
 	{
 		$this->template->tasks = $this->taskFacade->getUsersTasks($this->user->id);
