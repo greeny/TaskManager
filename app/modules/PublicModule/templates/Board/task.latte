@@ -11,7 +11,7 @@
 	<h1>Úkol: {$task->name}</h1>
 </div>
 
-{if $user->isLoggedIn() && $user->getIdentity()->role !== "member"}
+{if $user->isLoggedIn() && ($user->id == $task->user_id || $user->identity->role != 'member')}
 	<div class="btn-group">
 		<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Administrace <span class="caret"></span></a>
 		<ul class="dropdown-menu">
@@ -66,7 +66,7 @@
 
 {$task->description|nl2br}
 
-{if $user->isLoggedIn() && $user->getIdentity()->role !== "member"}
+{if $user->isLoggedIn()}
 	<div class="modal fade" id="addCategory">
 		<div class="modal-dialog">
 			<div class="modal-content">

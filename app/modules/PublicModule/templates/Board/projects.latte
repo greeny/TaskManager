@@ -8,7 +8,7 @@
 	<h1>Seznam projektů</h1>
 </div>
 
-{if $user->isLoggedIn() && $user->getIdentity()->role !== "member"}
+{if $user->isLoggedIn()}
 	<div class="btn-group">
 		<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Administrace <span class="caret"></span></a>
 		<ul class="dropdown-menu">
@@ -23,7 +23,7 @@
 			<th>Název projektu</th>
 			<th>Popis</th>
 			<th>Počet kategorií</th>
-			<th n:if="$user->isLoggedIn() && $user->getIdentity()->role !== 'member'">Administrace</th>
+			<th n:if="$user->isLoggedIn() && $user->identity->role != 'member'">Administrace</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -31,7 +31,7 @@
 			<td><a class="ajax" n:href="Board:project $project->id">{$project->name}</a></td>
 			<td>{$project->description|truncate:100}</td>
 			<td>{count($project->categories)}</td>
-			<td n:if="$user->isLoggedIn() && $user->getIdentity()->role !== 'member'">
+			<td n:if="$user->isLoggedIn() && $user->identity->role != 'member'">
 				<div class="btn-group">
 					<a class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">Akce <span class="caret"></span></a>
 					<ul class="dropdown-menu">
@@ -46,7 +46,7 @@
 
 {include #paginator, paginator => $paginator}
 
-{if $user->isLoggedIn() && $user->getIdentity()->role !== "member"}
+{if $user->isLoggedIn()}
 	<div class="modal fade" id="addCategory">
 		<div class="modal-dialog">
 			<div class="modal-content">

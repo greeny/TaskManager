@@ -40,6 +40,11 @@ class UserFacade extends Facade {
 		$this->users->insert($user);
 		return $user;
 	}
+
+	public function getUserById($id)
+	{
+		return $this->users->find($id);
+	}
 }
 
 class RegisterException extends \Exception {}

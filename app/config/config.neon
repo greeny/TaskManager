@@ -26,6 +26,7 @@ database:
 			projects: TaskManager\Model\Project
 			categories: TaskManager\Model\Category
 			tasks: TaskManager\Model\Task
+			users: TaskManager\Model\User
 		defaultClass: TaskManager\Model\ActiveRow
 
 services:

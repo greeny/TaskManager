@@ -36,6 +36,11 @@ abstract class BasePresenter extends Presenter
 	{
 		parent::beforeRender();
 		Helpers::prepareTemplate($this->template);
+		$u = $this->userFacade->getUserById($this->user->id);
+		if($u) {
+			$this->template->taskCount = $u->countTasks();
+			$this->template->sessionCount = $u->countSessions();
+		}
 	}
 
 	public function handleLogout()
