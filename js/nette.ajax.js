@@ -507,6 +507,9 @@
         },
         before: function() {
             $('#loading').show();
+        },
+        error: function() {
+            alert("Na stránce se vyskytla chyba, opakujte svůj dotaz později.");
         }
     });
 
