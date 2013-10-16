@@ -4,6 +4,7 @@
  */
 namespace TaskManager\Model;
 
+use Fabik\Database\DuplicateEntryException;
 use Nette\ArrayHash;
 use Nette\DateTime;
 use Nette\Utils\Paginator;
@@ -174,8 +175,18 @@ class TaskFacade extends Facade {
 
 	public function getUsersTasks($userId)
 	{
-		$ids = array_values($this->taskUsers->findBy('user_id', $userId)->fetchPairs('id', 'id'));
+		$ids = array_values($this->taskUsers->findBy('user_id', $userId)->fetchPairs('task_id', 'task_id'));
 		return $this->tasks->findBy('id', $ids);
+	}
+
+	public function addUserToTask($taskId, $userId)
+	{
+		try{
+			$this->taskUsers->create(array(
+				'task_id' => $taskId,
+				'user_id' => $userId,
+			));
+		} catch(DuplicateEntryException $e) {}
 	}
 }
 

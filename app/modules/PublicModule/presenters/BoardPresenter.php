@@ -171,6 +171,30 @@ class BoardPresenter extends BasePublicPresenter {
 		$this->redirect('this', array('noerror' => 1));
 	}
 
+	public function createComponentAddUserToTaskForm()
+	{
+		$form = new Form;
+		$form->addHidden('task_id');
+
+		$form->addSelect('user_id', 'Uživatel', $this->taskFacade->getUsersArray())
+			->setPrompt('-- Vyber uživatele --')
+			->setRequired('Vyber prosím uživatele.');
+
+		$form->addSubmit('submit', 'Přidat uživatele');
+
+		$form->onSuccess[] = $this->addUserToTaskFormSuccess;
+
+		return $form;
+	}
+
+	public function addUserToTaskFormSuccess(Form $form)
+	{
+		$v = $form->getValues();
+		$this->taskFacade->addUserToTask($v->task_id, $v->user_id);
+		$this->flashSuccess('Uživatel byl přidán k úkolu.');
+		$this->refresh();
+	}
+
 	protected function createPaginator($page = 1)
 	{
 		$paginator = new Paginator();
