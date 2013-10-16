@@ -90,3 +90,20 @@ body {
 .close-nofloat {
     float: none;
 }
+
+.loading {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+.loading-image {
+    position: relative;
+    top: 49%;
+    left: 45%;
+}

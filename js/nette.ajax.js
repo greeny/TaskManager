@@ -501,6 +501,15 @@
         }
     });
 
+    $.nette.ext('loader', {
+        complete: function() {
+            $('#loading').hide();
+        },
+        before: function() {
+            $('#loading').show();
+        }
+    });
+
 // default ajaxification (can be overridden in init())
     $.nette.ext('init', {
         load: function (rh) {
