@@ -22,4 +22,17 @@ class Task extends ActiveRow {
 	{
 		return $this->ref('users', 'user_id');
 	}
+
+	public function hasUserAccess($userId)
+	{
+		if((int) $this->user_id === (int) $userId) {
+			return true;
+		}
+		return $this->related('task_users', 'task_id')->where('user_id', $userId)->fetch();
+	}
+
+	public function getAssignedUsers()
+	{
+		return $this->related('task_users', 'task_id');
+	}
 }

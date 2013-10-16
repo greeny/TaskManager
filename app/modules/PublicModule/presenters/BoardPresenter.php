@@ -21,31 +21,33 @@ class BoardPresenter extends BasePublicPresenter {
 	public function renderProjects($page = 1)
 	{
 		$paginator = $this->createPaginator($page);
-		$paginator->itemCount = count($projects = $this->taskFacade->getProjects($this->user->id));
+		$paginator->itemCount = count($projects = $this->taskFacade->getProjects()->order('name ASC'));
 		$this->template->projects = $projects->limit($paginator->length, $paginator->offset);
 	}
 
 	public function renderProject($id, $page = 1, $noerror = false)
 	{
 		$paginator = $this->createPaginator($page);
-		if(!$this->template->project = $project = $this->taskFacade->getProject($this->user->id, $id))
+		if(!$this->template->project = $project = $this->taskFacade->getProject($id))
 		{
 			if(!$noerror) $this->flashError('Tento projekt neexistuje.');
 			$this->redirect('projects');
 		}
-		$paginator->itemCount = count($categories = $this->taskFacade->getCategories($this->user->id, $project->id));
+		$paginator->itemCount = count($categories = $this->taskFacade->getCategoriesInProject($project->id)->order('name ASC'));
 		$this->template->categories = $categories->limit($paginator->length, $paginator->offset);
 	}
 
 	public function renderCategory($id, $page = 1, $noerror = false)
 	{
 		$paginator = $this->createPaginator($page);
-		if(!$this->template->category = $category = $this->taskFacade->getCategory($this->user->id, $id))
+		if(!$this->template->category = $category = $this->taskFacade->getCategory($id))
 		{
 			if(!$noerror) $this->flashError('Tato kategorie neexistuje.');
 			$this->redirect('projects');
 		}
-		$this->template->tasks = $this->taskFacade->getTasks($this->user->id, $category->id, $paginator);
+		$tasks = $this->taskFacade->getTasksInCategory($this->user->id, $id);
+		$paginator->itemCount = count($tasks);
+		$this->template->tasks = $tasks->limit($paginator->length, $paginator->offset);
 		$this->template->project = $category->getParent();
 		$this->template->userArray = $this->taskFacade->getUsersArray();
 	}
@@ -130,12 +132,6 @@ class BoardPresenter extends BasePublicPresenter {
 			->setRequired('Prosím vyplň název.');
 
 		$form->addTextArea('description', 'Popis');
-
-		$form->addSelect('user', 'Přiřazený uživatel', $this->taskFacade->getUsersArray())
-			->setPrompt('-- Žádný --');
-
-		$form->addSelect('group', 'Přiřazená skupina', $this->taskFacade->getGroupsArray())
-			->setPrompt('-- Žádná --');
 
 		$form->addText('term', 'Termín');
 

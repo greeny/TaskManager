@@ -5,13 +5,20 @@
 namespace TaskManager\Model;
 
 class Category extends ActiveRow {
-	public function getTasksCount($userId)
+	public function getTaskCount($userId)
 	{
-		return $this->getTable()->getConnection()->query("SELECT COUNT(*) FROM `tasks` `t`
-			LEFT JOIN `task_permissions` `tp` ON `t`.`id` = `tp`.`task_id`
-			WHERE (`t`.`user_id` = ".(int)$userId." OR `t`.`assigned_user_id` = ".(int)$userId." OR `tp`.`user_id` = ".(int)$userId.")
-			AND `category_id` = ".(int)$this->id."
-			ORDER BY `name` ASC")->fetchField(0);
+		return count($this->getTasks($userId));
+	}
+
+	public function getTasks($userId)
+	{
+		$ids = array();
+		foreach($tasks = $this->related('tasks', 'category_id') as $task) {
+			if($task->hasUserAccess($userId)) {
+				$ids[] = $task->id;
+			}
+		}
+		return $this->related('tasks', 'category_id')->where('id', $ids);
 	}
 
 	public function getParent()

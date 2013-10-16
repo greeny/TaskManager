@@ -25,51 +25,76 @@ class TaskFacade extends Facade {
 	/** @var \TaskManager\Model\Groups */
 	protected $groups;
 
-	public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups)
+	/** @var \TaskManager\Model\TaskUsers */
+	protected $taskUsers;
+
+	public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups, TaskUsers $taskUsers)
 	{
 		$this->tasks = $tasks;
 		$this->categories = $categories;
 		$this->projects = $projects;
 		$this->users = $users;
 		$this->groups = $groups;
+		$this->taskUsers = $taskUsers;
 	}
 
-	public function getTasks($userId, $categoryId, Paginator $paginator)
+	/** NEW CODE **/
+
+	public function getProjects()
 	{
-		$sql = " FROM `tasks` `t`
-			LEFT JOIN `task_permissions` `tp` ON `t`.`id` = `tp`.`task_id`
-			WHERE (`t`.`user_id` = ".(int)$userId." OR `t`.`assigned_user_id` = ".(int)$userId." OR `tp`.`user_id` = ".(int)$userId.")
-			AND `category_id` = ".(int)$categoryId."
-			ORDER BY `name` ASC";
-		$paginator->itemCount = $this->tasks->query(
-			"SELECT COUNT(*) ".$sql)->fetchField(0);
-		$ids = $this->tasks->query("SELECT `t`.* $sql LIMIT {$paginator->offset}, {$paginator->length}")->fetchPairs('id', 'id');
-		return $this->tasks->findBy('id', array_values($ids))->order('name ASC');
+		return $this->projects->findAll();
 	}
 
-	public function getCategories($userId, $projectId)
+	public function getCategoriesInProject($projectId)
 	{
-		return $this->categories->findBy('project_id', $projectId)->order('name ASC');
+		return $this->categories->findBy('project_id', $projectId);
 	}
 
-	public function getProjects($userId)
-	{
-		return $this->projects->findAll()->order('name ASC');
+	public function getTasksInProject($userId, $projectId) {
+		$categoryIds = array_values($this->categories->findBy('project_id', $projectId)->fetchPairs('id', 'id'));
+		return $this->removeTasksWithoutAccess($userId, $this->tasks->findBy('category_id', $categoryIds));
 	}
 
-	public function getTask($userId, $id)
+	public function getTasksInCategory($userId, $categoryId)
 	{
-		return $this->tasks->find($id);
+		return $this->removeTasksWithoutAccess($userId, $this->tasks->findBy('category_id', $categoryId));
 	}
 
-	public function getCategory($userId, $id)
+	public function getTask($userId, $taskId)
 	{
-		return $this->categories->find($id);
+		if(!$task = $this->tasks->find($taskId)) {
+			throw new NotFoundException("Úkol nebyl nalezen.");
+		} elseif(!$task->hasUserAccess($userId)) {
+			throw new NotFoundException("Nemáš přístup k tomuto úkolu.");
+		}
+		return $task;
 	}
 
-	public function getProject($userId, $id)
+	public function getCategory($categoryId)
 	{
-		return $this->projects->find($id);
+		if(!$category = $this->categories->find($categoryId)) {
+			throw new NotFoundException("Kategorie nebyla nalezena.");
+		}
+		return $category;
+	}
+
+	public function getProject($projectId)
+	{
+		if(!$project = $this->projects->find($projectId)) {
+			throw new NotFoundException("Projekt nebyl nalezen.");
+		}
+		return $project;
+	}
+
+	protected function removeTasksWithoutAccess($userId, $tasks)
+	{
+		$ids = array();
+		foreach($tasks as $task) {
+			if($task->hasUserAccess($userId)) {
+				$ids[] = $task->id;
+			}
+		}
+		return $this->tasks->findBy('id', $ids);
 	}
 
 	public function addProject(ArrayHash $data)
@@ -103,15 +128,11 @@ class TaskFacade extends Facade {
 
 	public function addTask(ArrayHash $data, $userId)
 	{
-		$user = $this->users->find($data->user);
-		$group = $this->groups->find($data->group);
 		$array = array(
 			'name' => $data->name,
 			'user_id' => $userId,
 			'description' => $data->description,
 			'category_id' => $data->category_id,
-			'assigned_user_id' => $user ? $user->id : NULL,
-			'assigned_group_id' => $group ? $group->id : NULL,
 			'status' => Task::STATUS_ACTIVE,
 			'term' => ($data->term === '' ? NULL : DateTime::createFromFormat('d.m.Y', $data->term)),
 		);
@@ -153,6 +174,9 @@ class TaskFacade extends Facade {
 
 	public function getUsersTasks($userId)
 	{
-		return $this->tasks->findBy('assigned_user_id', $userId)->order('name ASC');
+		$ids = array_values($this->taskUsers->findBy('user_id', $userId)->fetchPairs('id', 'id'));
+		return $this->tasks->findBy('id', $ids);
 	}
 }
+
+class NotFoundException extends \Exception {}

@@ -31,12 +31,13 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td><b>Přiřazený uživatel</b></td>
-					<td>{if $u = $task->assigned_user}{$u->nick} {$u->role|role}{else}-{/if}</td>
+					<td><b>Přiřazení uživatelé</b></td>
+					<td>{foreach $task->assignedUsers as $row}
+							<a class="ajax" n:href="User:detail $row->user_id">{$row->user->nick}</a> {$row->user->role|role}{sep}, {/sep}{/foreach}</td>
 				</tr>
 				<tr>
 					<td><b>Přiřazená skupina</b></td>
-					<td>{if $g = $task->assigned_group}{$g->name}{else}-{/if}</td>
+					<td>{* if $g = $task->assigned_group *}{* $g->name *}{* else}-{/if *}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -80,8 +81,6 @@
 						<div class="form-group">{label name}{/label}{input name, class => 'form-control', value => $task->name}</div>
 						<div class="form-group">{label description}{/label}{? echo $_form["description"]->getControl()->addAttributes(array('class' => 'form-control'))->setHtml($task->description)}</div>
 						<div class="form-group">{label term}{/label}{input term, class => 'form-control input-datepicker', value => ($task->term ? $task->term->format('d.m.Y') : '')}</div>
-						<div class="form-group">{label user}{/label}{? echo $_form["user"]->setValue($task->assigned_user_id)->getControl()->addAttributes(array('class' => 'form-control'))}</div>
-						<div class="form-group">{label group}{/label}{? echo $_form["group"]->setValue($task->assigned_group_id)->getControl()->addAttributes(array('class' => 'form-control'))}</div>
 					</div>
 				{input category_id, value => $task->category_id}
 				{input id, value => $task->id}

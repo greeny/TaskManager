@@ -37,6 +37,7 @@ services:
 	- TaskManager\Model\Tasks
 	- TaskManager\Model\Categories
 	- TaskManager\Model\Projects
+	- TaskManager\Model\TaskUsers
 
 	## facades ##
 	- TaskManager\Model\UserFacade

@@ -7,7 +7,7 @@ namespace TaskManager\Model;
 class User extends ActiveRow {
 	public function countTasks()
 	{
-		return $this->related('tasks', 'assigned_user_id')->count();
+		return $this->related('task_users', 'user_id')->count();
 	}
 
 	public function countSessions()

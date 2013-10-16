@@ -23,6 +23,7 @@
 			<th>Název projektu</th>
 			<th>Popis</th>
 			<th>Počet kategorií</th>
+			<th>Počet úkolů</th>
 			<th n:if="$user->isLoggedIn() && $user->identity->role != 'member'">Administrace</th>
 		</tr>
 	</thead>
@@ -31,6 +32,7 @@
 			<td><a class="ajax" n:href="Board:project $project->id">{$project->name}</a></td>
 			<td>{$project->description|truncate:100}</td>
 			<td>{count($project->categories)}</td>
+			<td>{$project->getTaskCount($user->id)}</td>
 			<td n:if="$user->isLoggedIn() && $user->identity->role != 'member'">
 				<div class="btn-group">
 					<a class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">Akce <span class="caret"></span></a>
