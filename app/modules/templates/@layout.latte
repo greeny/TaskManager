@@ -142,13 +142,17 @@
 			$('a.ajax').on('click', function(){
 				history.pushState({}, '', $(this).attr('href'));
 			});
+			$("[data-tooltip]").tooltip();
+			$(".alert").alert();
+			$.datepicker.setDefaults($.datepicker.regional['cs']);
+			$('.input-datepicker').datepicker();
 		</script>
 	{/snippet}
 </body>
 </html>
 {define paginator}
 	<ul class="pagination">
-		<li n:class="$paginator->isFirst() ? disabled"><a n:href="this page => $paginator->page-1">&laquo;</a></li>
+		<li n:class="$paginator->isFirst() ? disabled"><a class="ajax" n:href="this page => $paginator->page-1">&laquo;</a></li>
 		{var $dots = false;}
 		{var $a = array()}
 		{for $j = 1; $j <= 5; $j++}
@@ -156,14 +160,14 @@
 		{/for}
 		{for $i = $paginator->getFirstPage(); $i <= $paginator->getLastPage(); $i++}
 			{if $paginator->getPage() == $i}
-				<li class="active"><a n:href="this">{$i}</a></li>{? $dots = true}
+				<li class="active"><a class="ajax" n:href="this">{$i}</a></li>{? $dots = true}
 			{elseif in_array($i, $a) || $paginator->getFirstPage() == $i || $paginator->getLastPage() == $i || abs($i - $paginator->getPage()) <= 3}
-				<li><a n:href="this page => $i">{$i}</a></li>{? $dots = true}
+				<li><a class="ajax" n:href="this page => $i">{$i}</a></li>{? $dots = true}
 			{elseif $dots == true}
 				<li class="disabled"><a>...</a></li>{?$dots = false;}
 			{/if}
 		{/for}
-		<li n:class="$paginator->isLast() ? disabled"><a n:href="this page => $paginator->page+1">&raquo;</a></li>
+		<li n:class="$paginator->isLast() ? disabled"><a class="ajax" n:href="this page => $paginator->page+1">&raquo;</a></li>
 		<li>
 			<a class="form-paginator">{form paginatorForm, class => 'pull-right'}{? $_form['maxPage']->setValue($paginator->getLastPage())}
 				{input maxPage}{input page class => 'form-control form-control-inline-micro', style=> 'padding: 0px; text-align: center;'}{input goto class => 'collapse form-control'}

@@ -11,13 +11,7 @@ function fillValues(id, values) {
     }
 }
 
-$(document).ready(function(){
-    $(".alert").alert();
-    $("[data-tooltip]").tooltip();
-
-    $.datepicker.setDefaults($.datepicker.regional['cs']);
-    $('.input-datepicker').datepicker();
-
+$(document).on('ready', function(){
     $resizable = $(".resizable");
     $resizable.resizable({
         alsoResize: '.resizable .resizable-iframe'

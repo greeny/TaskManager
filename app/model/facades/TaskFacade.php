@@ -188,6 +188,17 @@ class TaskFacade extends Facade {
 			));
 		} catch(DuplicateEntryException $e) {}
 	}
+
+	public function deleteUserFromTask($taskId, $userId)
+	{
+		$row = $this->taskUsers->findBy('task_id', $taskId)->where('user_id', $userId)->fetch();
+		if($row) $row->delete();
+	}
+
+	public function setStatus($id, $status)
+	{
+		$this->tasks->find($id)->update(array('status' => $status));
+	}
 }
 
 class NotFoundException extends \Exception {}

@@ -86,3 +86,7 @@ body {
 .new {
     background-color: #fbeed5;
 }
+
+.close-nofloat {
+    float: none;
+}

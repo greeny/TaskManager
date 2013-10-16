@@ -28,18 +28,37 @@ class Helpers extends Object {
 			if($text == Task::STATUS_ACTIVE) {
 				return "";
 			} else if($text == Task::STATUS_APPROVAL) {
-				$class = 'approval'; $text = 'čeká na ověření';
+				$class = 'approval'; $text = 'Čeká na ověření';
 			} else if($text == Task::STATUS_FINISHED) {
-				$class = 'finished'; $text = 'hotový';
+				$class = 'finished'; $text = 'Hotový';
 			} else if($text == Task::STATUS_IN_PROGRESS) {
-				$class = 'inprogress'; $text = 've vývoji';
+				$class = 'inprogress'; $text = 'Ve vývoji';
 			} else if($text == Task::STATUS_NEED_HELP) {
-				$class = 'needhelp'; $text = 'hledá se pomoc';
+				$class = 'needhelp'; $text = 'Hledá se pomoc';
 			} else if($text == Task::STATUS_WONT_FIX) {
-				$class = 'wontfix'; $text = 'nejde';
+				$class = 'wontfix'; $text = 'Nejde udělat';
 			}
 
-			return Html::el('span', array('class' => 'label label-status-'.$class))->setText(ucfirst($text));
+			return Html::el('span', array('class' => 'label label-status-'.$class))->setText($text);
+		});
+
+		$template->registerHelper('statusText', function($text) {
+			$class = '';
+			if($text == Task::STATUS_ACTIVE) {
+				$text = 'Normální';
+			} else if($text == Task::STATUS_APPROVAL) {
+				$text = 'Čeká na ověření';
+			} else if($text == Task::STATUS_FINISHED) {
+				$text = 'Hotový';
+			} else if($text == Task::STATUS_IN_PROGRESS) {
+				$text = 'Ve vývoji';
+			} else if($text == Task::STATUS_NEED_HELP) {
+				$text = 'Hledá se pomoc';
+			} else if($text == Task::STATUS_WONT_FIX) {
+				$text = 'Nejde udělat';
+			}
+
+			return Html::el()->setText($text);
 		});
 
 		$template->registerHelper('score', function($text) {

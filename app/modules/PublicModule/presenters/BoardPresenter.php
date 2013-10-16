@@ -133,7 +133,8 @@ class BoardPresenter extends BasePublicPresenter {
 
 		$form->addTextArea('description', 'Popis');
 
-		$form->addText('term', 'Termín');
+		$form->addText('term', 'Termín')
+			->setAttribute('autocomplete', 'off');
 
 		$form->addHidden('category_id', $this->params['id']);
 
@@ -156,7 +157,7 @@ class BoardPresenter extends BasePublicPresenter {
 		$this->refresh();
 	}
 
-	public function handleDelete($id, $type)
+	public function handleDelete($id, $type, $u = null)
 	{
 		if($type === 'project') {
 			$this->taskFacade->deleteProject($id);
@@ -167,8 +168,19 @@ class BoardPresenter extends BasePublicPresenter {
 		} else if($type === 'task') {
 			$this->taskFacade->deleteTask($id);
 			$this->flashSuccess('Úkol byl smazán.');
+		} else if($type === 'user') {
+			//dump("a");die;
+			$this->taskFacade->deleteUserFromTask($id, $u);
+			$this->flashSuccess('Uživatel byl odstraněn z úkolu.');
 		}
 		$this->redirect('this', array('noerror' => 1));
+	}
+
+	public function handleStatus($id, $status)
+	{
+		$this->taskFacade->setStatus($id, $status);
+		$this->flashSuccess('Status byl nastaven.');
+		$this->refresh();
 	}
 
 	public function createComponentAddUserToTaskForm()
