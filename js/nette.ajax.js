@@ -501,18 +501,6 @@
         }
     });
 
-    $.nette.ext('loader', {
-        complete: function() {
-            $('#loading').hide();
-        },
-        before: function() {
-            $('#loading').show();
-        },
-        error: function() {
-            alert("Na stránce se vyskytla chyba, opakujte svůj dotaz později.");
-        }
-    });
-
 // default ajaxification (can be overridden in init())
     $.nette.ext('init', {
         load: function (rh) {
