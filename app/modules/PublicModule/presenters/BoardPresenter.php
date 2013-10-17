@@ -6,6 +6,7 @@ namespace TaskManager\PublicModule;
 
 use Nette\Application\UI\Form;
 use Nette\Utils\Paginator;
+use TaskManager\Model\NotFoundException;
 use TaskManager\Model\TaskFacade;
 
 class BoardPresenter extends BasePublicPresenter {
@@ -28,9 +29,11 @@ class BoardPresenter extends BasePublicPresenter {
 	public function renderProject($id, $page = 1, $noerror = false)
 	{
 		$paginator = $this->createPaginator($page);
-		if(!$this->template->project = $project = $this->taskFacade->getProject($id))
-		{
-			if(!$noerror) $this->flashError('Tento projekt neexistuje.');
+		try {
+			$this->template->project = $project = $this->taskFacade->getProject($id);
+
+		} catch(NotFoundException $e) {
+			if(!$noerror) $this->flashError($e->getMessage());
 			$this->redirect('projects');
 		}
 		$paginator->itemCount = count($categories = $this->taskFacade->getCategoriesInProject($project->id)->order('name ASC'));
@@ -40,12 +43,14 @@ class BoardPresenter extends BasePublicPresenter {
 	public function renderCategory($id, $page = 1, $noerror = false)
 	{
 		$paginator = $this->createPaginator($page);
-		if(!$this->template->category = $category = $this->taskFacade->getCategory($id))
-		{
-			if(!$noerror) $this->flashError('Tato kategorie neexistuje.');
+		try {
+			$this->template->category = $category = $this->taskFacade->getCategory($id);
+		} catch(NotFoundException $e) {
+			if(!$noerror) $this->flashError($e->getMessage());
 			$this->redirect('projects');
 		}
-		$tasks = $this->taskFacade->getTasksInCategory($this->user->id, $id);
+
+		$tasks = $this->taskFacade->getTasksInCategory($this->user->id, $id)->order('priority DESC, name ASC');
 		$paginator->itemCount = count($tasks);
 		$this->template->tasks = $tasks->limit($paginator->length, $paginator->offset);
 		$this->template->project = $category->getParent();
@@ -54,11 +59,13 @@ class BoardPresenter extends BasePublicPresenter {
 
 	public function renderTask($id, $noerror = false)
 	{
-		if(!$this->template->task = $task = $this->taskFacade->getTask($this->user->id, $id))
-		{
-			if(!$noerror) $this->flashError('Tento úkol neexistuje.');
+		try {
+			$this->template->task = $task = $this->taskFacade->getTask($this->user->id, $id);
+		} catch(NotFoundException $e) {
+			if(!$noerror) $this->flashError($e->getMessage());
 			$this->redirect('projects');
 		}
+
 		$this->template->category = $category = $task->getParent();
 		$this->template->project = $category->getParent();
 	}
@@ -180,6 +187,13 @@ class BoardPresenter extends BasePublicPresenter {
 	{
 		$this->taskFacade->setStatus($id, $status);
 		$this->flashSuccess('Status byl nastaven.');
+		$this->refresh();
+	}
+
+	public function handlePriority($id, $priority)
+	{
+		$this->taskFacade->setPriority($id, $priority);
+		$this->flashSuccess('Priorita byla nastavena.');
 		$this->refresh();
 	}
 

@@ -13,19 +13,29 @@
 
 {if $user->isLoggedIn() && ($user->id == $task->user_id || $user->identity->role != 'member')}
 	<div class="btn-group">
-		<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Administrace <span class="caret"></span></a>
-		<ul class="dropdown-menu">
-			<li><a data-toggle="modal" href="#addCategory">Upravit</a></li>
-			<li><a data-toggle="modal" href="#addUser">Přidat uživatele</a></li>
-		</ul>
-	</div>
-	<div class="btn-group">
-		<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Status <span class="caret"></span></a>
-		<ul class="dropdown-menu">
-			{foreach array(1,2,3,4,5,6) as $i}
-				<li><a n:href="status! status => $i">{$i|statusText}</a></li>
-			{/foreach}
-		</ul>
+		<div class="btn-group">
+			<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Administrace <span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a data-toggle="modal" href="#addCategory">Upravit</a></li>
+				<li><a data-toggle="modal" href="#addUser">Přidat uživatele</a></li>
+			</ul>
+		</div>
+		<div class="btn-group">
+			<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Status <span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				{foreach range(1,6) as $i}
+					<li><a class="ajax" n:href="status! status => $i">{$i|statusText}</a></li>
+				{/foreach}
+			</ul>
+		</div>
+		<div class="btn-group">
+			<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Priorita <span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				{foreach range(1,10) as $i}
+					<li><a class="ajax" n:href="priority! priority => $i">{$i}{($i === 1 ? ' (nejmenší)' : ($i === 10 ? ' (největší)' : ''))}</a></li>
+				{/foreach}
+			</ul>
+		</div>
 	</div>
 {/if}
 
@@ -49,8 +59,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td><b>Přiřazená skupina</b></td>
-					<td>{* if $g = $task->assigned_group *}{* $g->name *}{* else}-{/if *}</td>
+					<td><b>Priorita</b></td>
+					<td>{$task->priority|priority}</td>
 				</tr>
 			</tbody>
 		</table>

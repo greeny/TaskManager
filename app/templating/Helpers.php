@@ -70,6 +70,11 @@ class Helpers extends Object {
 			return $return;
 		});
 
+		$template->registerHelper('priority', function($text) {
+			$text = (int) $text;
+			return Html::el('span', array('class' => 'badge'))->setHtml($text)->addAttributes(array('data-tooltip' => '', 'title' => 'Priorita'));
+		});
+
 		$template->registerHelper('difficulty', function($text) {
 			$text = (double) $text;
 			$return = Html::el('span', array('data-tooltip' => '', 'title' => 'Obtížnost: ' . ($text ?: 'zatím nenastavena')));

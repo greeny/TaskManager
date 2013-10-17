@@ -197,7 +197,14 @@ class TaskFacade extends Facade {
 
 	public function setStatus($id, $status)
 	{
-		$this->tasks->find($id)->update(array('status' => $status));
+		$task = $this->tasks->find($id);
+		if($task) $task->update(array('status' => $status));
+	}
+
+	public function setPriority($id, $priority)
+	{
+		$task = $this->tasks->find($id);
+		if($task) $task->update(array('priority' => $priority));
 	}
 }
 
