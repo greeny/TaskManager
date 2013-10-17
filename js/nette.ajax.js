@@ -501,6 +501,18 @@
         }
     });
 
+    /*
+    FADING
+    $.nette.ext('fade', {
+        complete: function() {
+            $('body').fadeIn(100);
+        },
+        start: function() {
+            $('body').fadeOut(100);
+        }
+    });
+    */
+
 // default ajaxification (can be overridden in init())
     $.nette.ext('init', {
         load: function (rh) {
