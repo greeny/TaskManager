@@ -133,6 +133,7 @@ class TaskFacade extends Facade {
 			'name' => $data->name,
 			'user_id' => $userId,
 			'description' => $data->description,
+			'priority' => $data->priority,
 			'category_id' => $data->category_id,
 			'status' => Task::STATUS_ACTIVE,
 			'term' => ($data->term === '' ? NULL : DateTime::createFromFormat('d.m.Y', $data->term)),

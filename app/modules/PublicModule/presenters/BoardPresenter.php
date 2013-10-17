@@ -143,6 +143,8 @@ class BoardPresenter extends BasePublicPresenter {
 		$form->addText('term', 'Termín')
 			->setAttribute('autocomplete', 'off');
 
+		$form->addSelect('priority', 'Priorita', range(1,10));
+
 		$form->addHidden('category_id', $this->params['id']);
 
 		$form->addSubmit('submit', 'Přidat úkol');
