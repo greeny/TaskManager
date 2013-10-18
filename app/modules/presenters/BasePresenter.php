@@ -38,7 +38,7 @@ abstract class BasePresenter extends Presenter
 		Helpers::prepareTemplate($this->template);
 		$u = $this->userFacade->getUserById($this->user->id);
 		if($u) {
-			$this->template->taskCount = $u->countTasks();
+			$this->template->taskCount = $u->countUnfinishedTasks();
 			$this->template->sessionCount = $u->countSessions();
 		}
 	}

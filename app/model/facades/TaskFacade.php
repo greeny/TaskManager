@@ -180,6 +180,11 @@ class TaskFacade extends Facade {
 		return $this->tasks->findBy('id', $ids);
 	}
 
+	public function getUsersUnfinishedTasks($userId)
+	{
+		return $this->getUsersTasks($userId)->where('status != ?', Task::STATUS_FINISHED);
+	}
+
 	public function addUserToTask($taskId, $userId)
 	{
 		try{
