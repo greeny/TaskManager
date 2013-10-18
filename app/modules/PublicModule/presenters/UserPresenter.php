@@ -31,6 +31,6 @@ class UserPresenter extends BasePublicPresenter {
 
 	public function renderTasks()
 	{
-		$this->template->tasks = $this->taskFacade->getUsersTasks($this->user->id);
+		$this->template->tasks = $this->taskFacade->getUsersTasks($this->user->id)->order('priority DESC, name ASC');
 	}
 }
