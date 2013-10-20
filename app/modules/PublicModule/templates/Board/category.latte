@@ -19,7 +19,7 @@
 	</div>
 {/if}
 
-<table class="table table-responsive">
+<div class="table-responsive"><table class="table">
 	<thead>
 		<tr>
 			<th>Jméno</th>
@@ -29,7 +29,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr n:foreach="$tasks as $task">
+		<tr n:foreach="$tasks as $task" class="task-row-priority-{$task->priority}">
 			<td>{$task->priority|priority} <a class="ajax" n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
 			<td><span data-tooltip title="{$task->description|truncate:100}">{$task->description|truncate:25}</span></td>
 			<td><a class="ajax" n:href="User:detail $task->user_id">{$task->user->nick}</a> {$task->user->role|role}</td>
@@ -43,7 +43,7 @@
 			</td>
 		</tr>
 	</tbody>
-</table>
+</table></div>
 
 {include #paginator, paginator => $paginator}
 

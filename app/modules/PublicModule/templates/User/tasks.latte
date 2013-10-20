@@ -3,7 +3,7 @@
 	<h1>Moje úkoly</h1>
 </div>
 
-<table class="table table-responsive">
+<div class="table-responsive"><table class="table">
 	<thead>
 		<tr>
 			<th>Název</th>
@@ -18,4 +18,4 @@
 			<td><a class="ajax" n:href="Board:project $task->parent->parent->id">{$task->parent->parent->name}</a> -> <a class="ajax" n:href="Board:category $task->parent->id">{$task->parent->name}</a></td>
 		</tr>
 	</tbody>
-</table>
+</table></div>

@@ -41,7 +41,7 @@
 
 <div class="row">
 	<div class="col-lg-6">
-		<table class="table table-responsive">
+		<div class="table-responsive"><table class="table">
 			<thead>
 				<tr>
 					<td><b>Zadavatel</b></td>
@@ -63,11 +63,11 @@
 					<td>{$task->priority|priority}</td>
 				</tr>
 			</tbody>
-		</table>
+		</table></div>
 	</div>
 
 	<div class="col-lg-6">
-		<table class="table table-responsive">
+		<div class="table-responsive"><table class="table">
 			<thead>
 				<tr>
 					<td><b>Termín</b></td>
@@ -84,7 +84,7 @@
 					<td>{if $task->lock}Ano{else}Ne{/if}</td>
 				</tr>
 			</tbody>
-		</table>
+		</table></div>
 	</div>
 </div>
 
