@@ -88,7 +88,45 @@
 	</div>
 </div>
 
-{$task->description|nl2br}
+<div class="row">
+	<div class="col-lg-6">
+		{$task->description|nl2br}
+	</div>
+
+	<div class="col-lg-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Komentáře</div>
+			{if $user->isLoggedIn()}
+				<div class="panel-body">
+					{form addCommentForm}
+						<div class="form-group">{label text}{/label}{input text, class => 'form-control'}</div>
+					{input send, class => 'form-control btn btn-primary'}
+					{/form}
+				</div>
+			{/if}
+
+			<ul class="list-group">
+				{foreach $task->comments as $comment}
+					<li n:class="list-group-item">
+						<div class="list-group-item-heading">
+							<span class="glyphicon glyphicon-user"></span>
+							<a class="ajax" n:href="User:detail $comment->user->nick">{$comment->user->nick}</a>
+							{$comment->user->role|role}
+							<span class="pull-right">
+								<span class="glyphicon glyphicon-time"></span> {$comment->time|time}
+							</span>
+							<div class="list-group-item-text">{$comment->text|nl2br}</div>
+						</div>
+					</li>
+				{/foreach}
+				<div class="text-center">
+					{include #paginator, paginator => $paginator}
+				</div>
+			</ul>
+
+		</div>
+	</div>
+</div>
 
 {if $user->isLoggedIn()}
 	<div class="modal fade" id="addCategory">
@@ -131,7 +169,7 @@
 				{input task_id, value => $task->id}
 
 					<div class="modal-footer">
-						{input submit, class => 'btn btn-primary', value => 'Upravit úkol'}
+						{input submit, class => 'btn btn-primary'}
 					</div>
 				{/form}
 			</div>

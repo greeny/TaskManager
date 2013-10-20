@@ -35,4 +35,9 @@ class Task extends ActiveRow {
 	{
 		return $this->related('task_users', 'task_id');
 	}
+
+	public function getComments()
+	{
+		return $this->related('task_comments', 'task_id')->order('time DESC');
+	}
 }

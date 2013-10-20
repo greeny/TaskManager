@@ -57,7 +57,7 @@ class BoardPresenter extends BasePublicPresenter {
 		$this->template->userArray = $this->taskFacade->getUsersArray();
 	}
 
-	public function renderTask($id, $noerror = false)
+	public function renderTask($id, $noerror = false, $page = 1)
 	{
 		try {
 			$this->template->task = $task = $this->taskFacade->getTask($this->user->id, $id);
@@ -66,6 +66,8 @@ class BoardPresenter extends BasePublicPresenter {
 			$this->redirect('projects');
 		}
 
+		$paginator = $this->createPaginator($page);
+		$paginator->setItemCount(count($task->comments));
 		$this->template->category = $category = $task->getParent();
 		$this->template->project = $category->getParent();
 	}
@@ -143,7 +145,7 @@ class BoardPresenter extends BasePublicPresenter {
 		$form->addText('term', 'Termín')
 			->setAttribute('autocomplete', 'off');
 
-		$form->addSelect('priority', 'Priorita', range(1,10));
+		$form->addSelect('priority', 'Priorita', array_combine($a = range(1,10), $a));
 
 		$form->addHidden('category_id', $this->params['id']);
 
@@ -178,7 +180,6 @@ class BoardPresenter extends BasePublicPresenter {
 			$this->taskFacade->deleteTask($id);
 			$this->flashSuccess('Úkol byl smazán.');
 		} else if($type === 'user') {
-			//dump("a");die;
 			$this->taskFacade->deleteUserFromTask($id, $u);
 			$this->flashSuccess('Uživatel byl odstraněn z úkolu.');
 		}
@@ -220,6 +221,23 @@ class BoardPresenter extends BasePublicPresenter {
 		$v = $form->getValues();
 		$this->taskFacade->addUserToTask($v->task_id, $v->user_id);
 		$this->flashSuccess('Uživatel byl přidán k úkolu.');
+		$this->refresh();
+	}
+
+	public function createComponentAddCommentForm()
+	{
+		$form = new Form;
+		$form->addTextArea('text', 'Komentář');
+		$form->addSubmit('send', 'Přidat komentář');
+		$form->onSuccess[] = $this->addCommentFormSuccess;
+		return $form;
+	}
+
+	public function addCommentFormSuccess(Form $form)
+	{
+		$v = $form->getValues();
+		$this->taskFacade->addComment($this->user->id, $this->params['id'], $v->text);
+		$this->flashSuccess('Komentář byl přidán.');
 		$this->refresh();
 	}
 

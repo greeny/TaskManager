@@ -7,7 +7,6 @@ namespace TaskManager\Model;
 use Fabik\Database\DuplicateEntryException;
 use Nette\ArrayHash;
 use Nette\DateTime;
-use Nette\Utils\Paginator;
 
 class TaskFacade extends Facade {
 
@@ -29,7 +28,10 @@ class TaskFacade extends Facade {
 	/** @var \TaskManager\Model\TaskUsers */
 	protected $taskUsers;
 
-	public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups, TaskUsers $taskUsers)
+	/** @var \TaskManager\Model\TaskComments */
+	protected $taskComments;
+
+	public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups, TaskUsers $taskUsers, TaskComments $taskComments)
 	{
 		$this->tasks = $tasks;
 		$this->categories = $categories;
@@ -37,9 +39,8 @@ class TaskFacade extends Facade {
 		$this->users = $users;
 		$this->groups = $groups;
 		$this->taskUsers = $taskUsers;
+		$this->taskComments = $taskComments;
 	}
-
-	/** NEW CODE **/
 
 	public function getProjects()
 	{
@@ -211,6 +212,16 @@ class TaskFacade extends Facade {
 	{
 		$task = $this->tasks->find($id);
 		if($task) $task->update(array('priority' => $priority));
+	}
+
+	public function addComment($userId, $taskId, $comment)
+	{
+		$this->taskComments->create(array(
+			'user_id' => $userId,
+			'task_id' => $taskId,
+			'text' => $comment,
+			'time' => Time(),
+		));
 	}
 }
 

@@ -26,19 +26,19 @@
 						<li n:class="list-group-item, ($chat->time > $lastChatTime ? 'new')">
 							<div class="list-group-item-heading">
 								<span class="glyphicon glyphicon-user"></span>
-								<a n:href="User:detail $chat->user->nick">{$chat->user->nick}</a>
+								<a class="ajax" n:href="User:detail $chat->user->nick">{$chat->user->nick}</a>
 								{$chat->user->role|role}
 								<span class="pull-right">
 								<span class="glyphicon glyphicon-time"></span> {$chat->time|time}
 							</span>
-								<div class="list-group-item-text">{$chat->message}</div>
+								<div class="list-group-item-text">{$chat->message|nl2br}</div>
 							</div>
 						</li>
 					{/foreach}
 					<ul class="pager">
-						<li><a n:href="this page => ($page - 1)">Previous</a></li>
+						<li><a class="ajax" n:href="this page => ($page - 1)">Previous</a></li>
 						<li>Strana {$page}</li>
-						<li><a n:href="this page => ($page + 1)">Next</a></li>
+						<li><a class="ajax" n:href="this page => ($page + 1)">Next</a></li>
 					</ul>
 				{/snippet}
 			</ul>

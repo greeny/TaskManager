@@ -110,7 +110,7 @@ abstract class BasePresenter extends Presenter
 			$this->refresh();
 		}
 		$this->flashSuccess("Registrace proběhla úspěšně.");
-		$this->redirect("Dashboard:default");
+		$this->refresh();
 	}
 
 	public function createComponentLoginForm()
@@ -136,7 +136,7 @@ abstract class BasePresenter extends Presenter
 		try {
 			$this->user->login($form->getValues()->nick, $form->getValues()->password);
 			$this->flashSuccess('Přihlášení proběhlo úspěšně.');
-			$this->redirect("Dashboard:default");
+			$this->refresh();
 		} catch(AuthenticationException $e) {
 			$this->flashError($e->getMessage());
 			$this->refresh();
