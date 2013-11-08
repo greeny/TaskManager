@@ -151,7 +151,7 @@ class BoardPresenter extends BasePublicPresenter {
 
 		$form->addSubmit('submit', 'Přidat úkol');
 
-		$form->onSuccess[] = $this->addTaskFormSuccess;
+		$form->onSubmit[] = $this->addTaskFormSuccess;
 
 		return $form;
 	}
@@ -159,11 +159,16 @@ class BoardPresenter extends BasePublicPresenter {
 	public function addTaskFormSuccess(Form $form)
 	{
 		$v = $form->getValues();
-		$this->taskFacade->addTask($v, $this->user->id);
+		$task = $this->taskFacade->addTask($v, $this->user->id);
 		if($v->id) {
 			$this->flashSuccess('Úkol byl upraven.');
 		} else {
 			$this->flashSuccess('Úkol byl přidán.');
+		}
+		if($task) {
+			foreach($task->getAssignedUsers() as $user) {
+				$this->notificationFacade->addNotification($this->user->id, $user->id, $task->id, 'upravil úkol');
+			}
 		}
 		$this->refresh();
 	}
@@ -181,6 +186,7 @@ class BoardPresenter extends BasePublicPresenter {
 			$this->flashSuccess('Úkol byl smazán.');
 		} else if($type === 'user') {
 			$this->taskFacade->deleteUserFromTask($id, $u);
+			$this->notificationFacade->addNotification($this->user->id, $u, $id, 'tě odstranil z úkolu');
 			$this->flashSuccess('Uživatel byl odstraněn z úkolu.');
 		}
 		$this->redirect('this', array('noerror' => 1));
@@ -190,6 +196,14 @@ class BoardPresenter extends BasePublicPresenter {
 	{
 		$this->taskFacade->setStatus($id, $status);
 		$this->flashSuccess('Status byl nastaven.');
+
+		$task = $this->taskFacade->getTaskById($id);
+		if($task) {
+			foreach($task->getAssignedUsers() as $user) {
+				$this->notificationFacade->addNotification($this->user->id, $user->id, $id, 'nastavil status úkolu');
+			}
+		}
+
 		$this->refresh();
 	}
 
@@ -197,6 +211,14 @@ class BoardPresenter extends BasePublicPresenter {
 	{
 		$this->taskFacade->setPriority($id, $priority);
 		$this->flashSuccess('Priorita byla nastavena.');
+
+		$task = $this->taskFacade->getTaskById($id);
+		if($task) {
+			foreach($task->getAssignedUsers() as $user) {
+				$this->notificationFacade->addNotification($this->user->id, $user->id, $id, 'nastavil prioritu úkolu');
+			}
+		}
+
 		$this->refresh();
 	}
 
@@ -220,6 +242,7 @@ class BoardPresenter extends BasePublicPresenter {
 	{
 		$v = $form->getValues();
 		$this->taskFacade->addUserToTask($v->task_id, $v->user_id);
+		$this->notificationFacade->addNotification($this->user->id, $v->user_id, $v->task_id, 'tě přidal k úkolu');
 		$this->flashSuccess('Uživatel byl přidán k úkolu.');
 		$this->refresh();
 	}
@@ -237,6 +260,12 @@ class BoardPresenter extends BasePublicPresenter {
 	{
 		$v = $form->getValues();
 		$this->taskFacade->addComment($this->user->id, $this->params['id'], $v->text);
+		$task = $this->taskFacade->getTaskById($this->params['id']);
+		if($task) {
+			foreach($task->getAssignedUsers() as $user) {
+				$this->notificationFacade->addNotification($this->user->id, $user->id, $task->id, 'okomentoval úkol');
+			}
+		}
 		$this->flashSuccess('Komentář byl přidán.');
 		$this->refresh();
 	}

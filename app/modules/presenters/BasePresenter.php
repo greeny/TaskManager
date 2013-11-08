@@ -6,6 +6,7 @@ use Nette\Security\AuthenticationException;
 use TaskManager\Controls\MailSender;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
+use TaskManager\Model\NotificationFacade;
 use TaskManager\Model\RegisterException;
 use TaskManager\Model\UserFacade;
 use TaskManager\Templating\Helpers;
@@ -20,6 +21,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var MailSender */
 	protected $mailSender;
+
+	/** @var \TaskManager\Model\NotificationFacade */
+	protected $notificationFacade;
 
 	public function startup()
 	{
@@ -36,9 +40,11 @@ abstract class BasePresenter extends Presenter
 	{
 		parent::beforeRender();
 		Helpers::prepareTemplate($this->template);
+		/** @var \TaskManager\Model\User $u */
 		$u = $this->userFacade->getUserById($this->user->id);
 		if($u) {
 			$this->template->taskCount = $u->countUnfinishedTasks();
+			$this->template->notificationCount = $u->countNewNotifications();
 			$this->template->sessionCount = $u->countSessions();
 		}
 	}
@@ -52,10 +58,11 @@ abstract class BasePresenter extends Presenter
 		$this->redirect(":Public:Dashboard:default");
 	}
 
-	public function injectBase(MailSender $mailSender, UserFacade $userFacade)
+	public function injectBase(MailSender $mailSender, UserFacade $userFacade, NotificationFacade $notificationFacade)
 	{
 		$this->mailSender = $mailSender;
 		$this->userFacade = $userFacade;
+		$this->notificationFacade = $notificationFacade;
 	}
 
 	public function flashError($message)

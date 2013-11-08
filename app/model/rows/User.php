@@ -26,4 +26,9 @@ class User extends ActiveRow {
 	{
 		return $this->related('sessions', 'owner')->count();
 	}
+
+	public function countNewNotifications()
+	{
+		return $this->related('notifications', 'target_user_id')->where('seen', 0)->count();
+	}
 }

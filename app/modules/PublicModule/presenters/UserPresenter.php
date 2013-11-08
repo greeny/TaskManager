@@ -4,6 +4,7 @@
  */
 namespace TaskManager\PublicModule;
 
+use Nette\Utils\Paginator;
 use TaskManager\Model\TaskFacade;
 
 class UserPresenter extends BasePublicPresenter {
@@ -32,5 +33,34 @@ class UserPresenter extends BasePublicPresenter {
 	public function renderTasks()
 	{
 		$this->template->tasks = $this->taskFacade->getUsersUnfinishedTasks($this->user->id)->order('priority DESC, name ASC');
+	}
+
+	public function renderNotifications($page = 1)
+	{
+		$this->template->notifications = $this->notificationFacade->getNotificationsForUser($this->user->id, $this->createPaginator(), $page);
+	}
+
+	protected function createPaginator($page = 1)
+	{
+		$paginator = new Paginator();
+		$paginator->page = $page;
+		$paginator->itemsPerPage = 30;
+		return $this->template->paginator = $paginator;
+	}
+
+	public function handleSeen($id)
+	{
+		if($row = $this->notificationFacade->find($id)) {
+			$row->setSeen();
+		}
+		$this->refresh();
+	}
+
+	public function handleDelete($id)
+	{
+		if($row = $this->notificationFacade->find($id)) {
+			$row->delete();
+		}
+		$this->refresh();
 	}
 }

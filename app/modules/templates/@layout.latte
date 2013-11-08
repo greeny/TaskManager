@@ -26,6 +26,7 @@
 			<ul class="nav navbar-nav navbar-left">
 				<li n:class="$presenter->isLinkCurrent(':Public:Board:projects') ? active"><a class="ajax" n:href=":Public:Board:projects"><span class="glyphicon glyphicon-list"></span> Seznam projektů</a></li>
 				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:tasks') ? active"><a n:href=":Public:User:tasks" class="ajax"><span class="glyphicon glyphicon-tasks"></span> Moje úkoly <span class="badge">{$taskCount ?: ''}</span></a></li></li>
+				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:notifications') ? active"><a n:href=":Public:User:notifications" class="ajax"><span class="glyphicon glyphicon-exclamation-sign"></span> Upozornění <span class="badge">{$notificationCount ?: ''}</span></a></li></li>
 				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:sessions') ? active"><a n:href=":Public:User:sessions" class="ajax"><span class="glyphicon glyphicon-calendar"></span> Moje schůzky <span class="badge">{$sessionCount ?: ''}</span></a></li></li>
 			</ul>
 
@@ -130,18 +131,18 @@
 	<script src="{$basePath}/js/bootstrap.typeahead.js"></script>
 	<script src="{$basePath}/js/common.js"></script>
 	<script>
-		$(function () {
+		/*$(function () {
 			$.nette.init();
-		});
+		});*/
 	</script>
 	{#scripts}
 	{/#}
 
 	{snippet essentials}
 		<script>
-			$('a.ajax').on('click', function(){
+			/*$('a.ajax').on('click', function(){
 				history.pushState({}, '', $(this).attr('href'));
-			});
+			});*/
 			$("[data-tooltip]").tooltip();
 			$(".alert").alert();
 			$.datepicker.setDefaults($.datepicker.regional['cs']);

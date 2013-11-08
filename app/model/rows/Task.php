@@ -33,7 +33,11 @@ class Task extends ActiveRow {
 
 	public function getAssignedUsers()
 	{
-		return $this->related('task_users', 'task_id');
+		$return = array();
+		foreach($this->related('task_users', 'task_id') as $user) {
+			$return[] = $user;
+		}
+		return $return;
 	}
 
 	public function getComments()

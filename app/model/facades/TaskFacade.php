@@ -141,7 +141,12 @@ class TaskFacade extends Facade {
 		);
 		if($data->id) {
 			$row = $this->tasks->find($data->id);
-			return ($row ? $row->update($array) : null);
+			if($row) {
+				$row->update($array);
+				return $row;
+			} else {
+				return NULL;
+			}
 		} else {
 			return $this->tasks->create($array);
 		}
@@ -222,6 +227,11 @@ class TaskFacade extends Facade {
 			'text' => $comment,
 			'time' => Time(),
 		));
+	}
+
+	public function getTaskById($id)
+	{
+		return $this->tasks->find($id);
 	}
 }
 

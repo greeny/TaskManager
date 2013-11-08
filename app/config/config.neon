@@ -26,6 +26,8 @@ database:
 			projects: TaskManager\Model\Project
 			categories: TaskManager\Model\Category
 			tasks: TaskManager\Model\Task
+			taskUsers: TaskManager\Model\TaskUser
+			notifications: TaskManager\Model\Notification
 			users: TaskManager\Model\User
 		defaultClass: TaskManager\Model\ActiveRow
 
@@ -39,9 +41,11 @@ services:
 	- TaskManager\Model\Projects
 	- TaskManager\Model\TaskUsers
 	- TaskManager\Model\TaskComments
+	- TaskManager\Model\Notifications
 
 	## facades ##
 	- TaskManager\Model\UserFacade
+	- TaskManager\Model\NotificationFacade
 	- TaskManager\Model\TaskFacade
 	- TaskManager\Model\ChatFacade
 
