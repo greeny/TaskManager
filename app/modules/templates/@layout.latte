@@ -55,6 +55,9 @@
 	<div class="container">
 		{snippet flashes}
 			{#flash}
+				<div n:if="isset($notificationCount) && $notificationCount > 0 && (!$presenter->isLinkCurrent('User:notifications'))" class="alert alert-info">
+					<b><a n:href="User:notifications">Máte nová upozornění!</a></b>
+				</div>
 				{foreach $flashes as $flash}
 					<div class="alert alert-{$flash->type} alert-dismissable fade in">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

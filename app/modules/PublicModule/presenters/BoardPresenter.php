@@ -170,6 +170,7 @@ class BoardPresenter extends BasePublicPresenter {
 				$this->notificationFacade->addNotification($this->user->id, $user->id, $task->id, 'upravil úkol');
 			}
 		}
+		$this->notificationFacade->addNotification($this->user->id, $task->user->id, $task->id, 'upravil úkol');
 		$this->refresh();
 	}
 
@@ -203,6 +204,7 @@ class BoardPresenter extends BasePublicPresenter {
 				$this->notificationFacade->addNotification($this->user->id, $user->id, $id, 'nastavil status úkolu');
 			}
 		}
+		$this->notificationFacade->addNotification($this->user->id, $task->user->id, $id, 'nastavil status úkolu');
 
 		$this->refresh();
 	}
@@ -218,6 +220,7 @@ class BoardPresenter extends BasePublicPresenter {
 				$this->notificationFacade->addNotification($this->user->id, $user->id, $id, 'nastavil prioritu úkolu');
 			}
 		}
+		$this->notificationFacade->addNotification($this->user->id, $task->user->id, $id, 'nastavil prioritu úkolu');
 
 		$this->refresh();
 	}
@@ -266,6 +269,7 @@ class BoardPresenter extends BasePublicPresenter {
 				$this->notificationFacade->addNotification($this->user->id, $user->id, $task->id, 'okomentoval úkol');
 			}
 		}
+		$this->notificationFacade->addNotification($this->user->id, $task->user->id, $task->id, 'okomentoval úkol');
 		$this->flashSuccess('Komentář byl přidán.');
 		$this->refresh();
 	}

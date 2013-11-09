@@ -37,14 +37,14 @@ class UserPresenter extends BasePublicPresenter {
 
 	public function renderNotifications($page = 1)
 	{
-		$this->template->notifications = $this->notificationFacade->getNotificationsForUser($this->user->id, $this->createPaginator(), $page);
+		$this->template->notifications = $this->notificationFacade->getNotificationsForUser($this->user->id, $this->createPaginator($page), $page);
 	}
 
 	protected function createPaginator($page = 1)
 	{
 		$paginator = new Paginator();
 		$paginator->page = $page;
-		$paginator->itemsPerPage = 30;
+		$paginator->itemsPerPage = 20;
 		return $this->template->paginator = $paginator;
 	}
 
