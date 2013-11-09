@@ -53,8 +53,8 @@
 					<td><b>Přiřazení uživatelé</b></td>
 					<td>
 						{foreach $task->assignedUsers as $row}
-							<a class="ajax" n:href="User:detail $row->user_id">{$row->user->nick}</a> {$row->user->role|role}
-							{if $user->isLoggedIn()}<a data-tooltip title="Odebrat uživatele {$row->user->nick} z úkolu" class="ajax close close-nofloat" n:href="delete!, type => 'user', u => $row->user_id">&times;</a>{/if}{sep}, {/sep}
+							<a class="ajax" n:href="User:detail $row->id">{$row->nick}</a> {$row->role|role}
+							{if $user->isLoggedIn()}<a data-tooltip title="Odebrat uživatele {$row->nick} z úkolu" class="ajax close close-nofloat" n:href="delete!, type => 'user', u => $row->id">&times;</a>{/if}{sep}, {/sep}
 						{/foreach}
 					</td>
 				</tr>

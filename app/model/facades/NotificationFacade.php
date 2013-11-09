@@ -31,8 +31,7 @@ class NotificationFacade extends Facade {
 	public function addNotification($sourceId, $targetId, $taskId, $text)
 	{
 		if($sourceId === NULL || $targetId === NULL || $taskId === NULL) {
-			dump($sourceId, $targetId, $taskId, $text);
-			die;
+			return;
 		}
 
 		if((int)$sourceId !== (int)$targetId) {

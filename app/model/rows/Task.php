@@ -35,7 +35,7 @@ class Task extends ActiveRow {
 	{
 		$return = array();
 		foreach($this->related('task_users', 'task_id') as $user) {
-			$return[] = $user;
+			$return[] = $user->ref('users', 'user_id');
 		}
 		return $return;
 	}
