@@ -1,6 +1,6 @@
 {#content}
 <ol class="breadcrumb">
-	<li><a class="ajax" n:href="Dashboard:default">Nástěnka</a></li>
+	<li><a n:href="Dashboard:default">Nástěnka</a></li>
 	<li class="active">Upozornění</li>
 </ol>
 
@@ -12,14 +12,14 @@
 	{foreach $notifications as $notification}
 		<div n:class="list-group-item, (!$notification->seen?'new':'')">
 			<p n:class="list-group-item-text">
-				<a class="ajax" n:href="User:detail id=>$notification->source_user_id">{$notification->sourceUser->nick}</a> {$notification->sourceUser->role|role}
+				<a n:href="User:detail id=>$notification->source_user_id">{$notification->sourceUser->nick}</a> {$notification->sourceUser->role|role}
 				{$notification->text}
-				<a class="ajax" n:href="Board:task id=>$notification->task_id">{$notification->task->name}</a>
+				<a n:href="Board:task id=>$notification->task_id">{$notification->task->name}</a>
 				<span n:if="!$notification->seen" class="label label-success">NOVÝ</span>
 				<span class="pull-right">
 					({$notification->time|time})
-					<a n:if="!$notification->seen" n:href="seen! id=>$notification->id" class="ajax btn btn-info btn-xs">Ok</a>
-					<a n:href="delete! id=>$notification->id" class="ajax close close-nofloat">&times;</a>
+					<a n:if="!$notification->seen" n:href="seen! id=>$notification->id" class="btn btn-info btn-xs">Ok</a>
+					<a n:href="delete! id=>$notification->id" class="close close-nofloat">&times;</a>
 				</span>
 			</p>
 		</div>

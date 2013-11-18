@@ -24,10 +24,10 @@
 			</div>
 
 			<ul class="nav navbar-nav navbar-left">
-				<li n:class="$presenter->isLinkCurrent(':Public:Board:projects') ? active"><a class="ajax" n:href=":Public:Board:projects"><span class="glyphicon glyphicon-list"></span> Seznam projektů</a></li>
-				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:tasks') ? active"><a n:href=":Public:User:tasks" class="ajax"><span class="glyphicon glyphicon-tasks"></span> Moje úkoly <span class="badge">{$taskCount ?: ''}</span></a></li></li>
-				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:notifications') ? active"><a n:href=":Public:User:notifications" class="ajax"><span class="glyphicon glyphicon-exclamation-sign"></span> Upozornění <span class="badge">{$notificationCount ?: ''}</span></a></li></li>
-				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:sessions') ? active"><a n:href=":Public:User:sessions" class="ajax"><span class="glyphicon glyphicon-calendar"></span> Moje schůzky <span class="badge">{$sessionCount ?: ''}</span></a></li></li>
+				<li n:class="$presenter->isLinkCurrent(':Public:Board:projects') ? active"><a n:href=":Public:Board:projects"><span class="glyphicon glyphicon-list"></span> Seznam projektů</a></li>
+				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:tasks') ? active"><a n:href=":Public:User:tasks"><span class="glyphicon glyphicon-tasks"></span> Moje úkoly <span class="badge">{$taskCount ?: ''}</span></a></li></li>
+				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:notifications') ? active"><a n:href=":Public:User:notifications"><span class="glyphicon glyphicon-exclamation-sign"></span> Upozornění <span class="badge">{$notificationCount ?: ''}</span></a></li></li>
+				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:sessions') ? active"><a n:href=":Public:User:sessions"><span class="glyphicon glyphicon-calendar"></span> Moje schůzky <span class="badge">{$sessionCount ?: ''}</span></a></li></li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
@@ -129,23 +129,14 @@
 	<script src="{$basePath}/js/jquery-ui.js"></script>
 	<script src="{$basePath}/js/jquery-ui.cs.js"></script>
 	<script src="{$basePath}/js/netteForms.js"></script>
-	<script src="{$basePath}/js/nette.ajax.js"></script>
 	<script src="{$basePath}/js/bootstrap.js"></script>
 	<script src="{$basePath}/js/bootstrap.typeahead.js"></script>
 	<script src="{$basePath}/js/common.js"></script>
-	<script>
-		$(function () {
-			$.nette.init();
-		});
-	</script>
 	{#scripts}
 	{/#}
 
 	{snippet essentials}
 		<script>
-			/*$('a.ajax').on('click', function(){
-				history.pushState({}, '', $(this).attr('href'));
-			});*/
 			$("[data-tooltip]").tooltip();
 			$(".alert").alert();
 			$.datepicker.setDefaults($.datepicker.regional['cs']);
@@ -156,7 +147,7 @@
 </html>
 {define paginator}
 	<ul class="pagination">
-		<li n:class="$paginator->isFirst() ? disabled"><a class="ajax" n:href="this page => $paginator->page-1">&laquo;</a></li>
+		<li n:class="$paginator->isFirst() ? disabled"><a n:href="this page => $paginator->page-1">&laquo;</a></li>
 		{var $dots = false;}
 		{var $a = array()}
 		{for $j = 1; $j <= 5; $j++}
@@ -164,14 +155,14 @@
 		{/for}
 		{for $i = $paginator->getFirstPage(); $i <= $paginator->getLastPage(); $i++}
 			{if $paginator->getPage() == $i}
-				<li class="active"><a class="ajax" n:href="this">{$i}</a></li>{? $dots = true}
+				<li class="active"><a n:href="this">{$i}</a></li>{? $dots = true}
 			{elseif in_array($i, $a) || $paginator->getFirstPage() == $i || $paginator->getLastPage() == $i || abs($i - $paginator->getPage()) <= 3}
-				<li><a class="ajax" n:href="this page => $i">{$i}</a></li>{? $dots = true}
+				<li><a n:href="this page => $i">{$i}</a></li>{? $dots = true}
 			{elseif $dots == true}
 				<li class="disabled"><a>...</a></li>{?$dots = false;}
 			{/if}
 		{/for}
-		<li n:class="$paginator->isLast() ? disabled"><a class="ajax" n:href="this page => $paginator->page+1">&raquo;</a></li>
+		<li n:class="$paginator->isLast() ? disabled"><a n:href="this page => $paginator->page+1">&raquo;</a></li>
 		<li>
 			<a class="form-paginator">{form paginatorForm, class => 'pull-right'}{? $_form['maxPage']->setValue($paginator->getLastPage())}
 				{input maxPage}{input page class => 'form-control form-control-inline-micro', style=> 'padding: 0px; text-align: center;'}{input goto class => 'collapse form-control'}

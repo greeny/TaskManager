@@ -1,6 +1,6 @@
 {#content}
 <ol class="breadcrumb">
-	<li><a class="ajax" n:href="Dashboard:default">Nástěnka</a></li>
+	<li><a n:href="Dashboard:default">Nástěnka</a></li>
 	<li class="active">Moje úkoly</li>
 </ol>
 
@@ -18,9 +18,9 @@
 	</thead>
 	<tbody>
 		<tr n:foreach="$tasks as $task">
-			<td>{$task->priority|priority} <a class="ajax" n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
-			<td><a class="ajax" n:href="User:detail $task->user_id">{$task->owner->nick}<a/> {$task->owner->role|role}</td>
-			<td><a class="ajax" n:href="Board:project $task->parent->parent->id">{$task->parent->parent->name}</a> -> <a class="ajax" n:href="Board:category $task->parent->id">{$task->parent->name}</a></td>
+			<td>{$task->priority|priority} <a n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
+			<td><a n:href="User:detail $task->user_id">{$task->owner->nick}<a/> {$task->owner->role|role}</td>
+			<td><a n:href="Board:project $task->parent->parent->id">{$task->parent->parent->name}</a> -> <a n:href="Board:category $task->parent->id">{$task->parent->name}</a></td>
 		</tr>
 	</tbody>
 </table></div>

@@ -1,8 +1,8 @@
 {#content}
 <ol class="breadcrumb">
-	<li><a class="ajax" n:href="Dashboard:default">Nástěnka</a></li>
-	<li><a class="ajax" n:href="Board:projects">Seznam projektů</a></li>
-	<li><a class="ajax" n:href="Board:project $project->id">Projekt: {$project->name}</a></li>
+	<li><a n:href="Dashboard:default">Nástěnka</a></li>
+	<li><a n:href="Board:projects">Seznam projektů</a></li>
+	<li><a n:href="Board:project $project->id">Projekt: {$project->name}</a></li>
 	<li class="active">Kategorie: {$category->name}</li>
 </ol>
 
@@ -30,9 +30,9 @@
 	</thead>
 	<tbody>
 		<tr n:foreach="$tasks as $task" class="task-row-priority-{$task->priority}">
-			<td>{$task->priority|priority} <a class="ajax" n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
+			<td>{$task->priority|priority} <a n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
 			<td><span data-tooltip title="{$task->description|truncate:100}">{$task->description|truncate:25}</span></td>
-			<td><a class="ajax" n:href="User:detail $task->user_id">{$task->user->nick}</a> {$task->user->role|role}</td>
+			<td><a n:href="User:detail $task->user_id">{$task->user->nick}</a> {$task->user->role|role}</td>
 			<td n:if="$user->isLoggedIn()">
 				<div class="btn-group">
 					<a class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">Akce <span class="caret"></span></a>

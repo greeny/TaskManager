@@ -1,9 +1,9 @@
 {#content}
 <ol class="breadcrumb">
-	<li><a class="ajax" n:href="Dashboard:default">Nástěnka</a></li>
-	<li><a class="ajax" n:href="Board:projects">Seznam projektů</a></li>
-	<li><a class="ajax" n:href="Board:project $project->id">Projekt: {$project->name}</a></li>
-	<li><a class="ajax" n:href="Board:category $category->id">Kategorie: {$category->name}</a></li>
+	<li><a n:href="Dashboard:default">Nástěnka</a></li>
+	<li><a n:href="Board:projects">Seznam projektů</a></li>
+	<li><a n:href="Board:project $project->id">Projekt: {$project->name}</a></li>
+	<li><a n:href="Board:category $category->id">Kategorie: {$category->name}</a></li>
 	<li class="active">Úkol: {$task->name}</li>
 </ol>
 
@@ -24,7 +24,7 @@
 			<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Status <span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				{foreach range(1,6) as $i}
-					<li><a class="ajax" n:href="status! status => $i">{$i|statusText}</a></li>
+					<li><a n:href="status! status => $i">{$i|statusText}</a></li>
 				{/foreach}
 			</ul>
 		</div>
@@ -32,7 +32,7 @@
 			<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown">Priorita <span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				{foreach range(1,10) as $i}
-					<li><a class="ajax" n:href="priority! priority => $i">{$i}{($i === 1 ? ' (nejmenší)' : ($i === 10 ? ' (největší)' : ''))}</a></li>
+					<li><a n:href="priority! priority => $i">{$i}{($i === 1 ? ' (nejmenší)' : ($i === 10 ? ' (největší)' : ''))}</a></li>
 				{/foreach}
 			</ul>
 		</div>
@@ -53,8 +53,8 @@
 					<td><b>Přiřazení uživatelé</b></td>
 					<td>
 						{foreach $task->assignedUsers as $row}
-							<a class="ajax" n:href="User:detail $row->id">{$row->nick}</a> {$row->role|role}
-							{if $user->isLoggedIn()}<a data-tooltip title="Odebrat uživatele {$row->nick} z úkolu" class="ajax close close-nofloat" n:href="delete!, type => 'user', u => $row->id">&times;</a>{/if}{sep}, {/sep}
+							<a n:href="User:detail $row->id">{$row->nick}</a> {$row->role|role}
+							{if $user->isLoggedIn()}<a data-tooltip title="Odebrat uživatele {$row->nick} z úkolu" class="close close-nofloat" n:href="delete!, type => 'user', u => $row->id">&times;</a>{/if}{sep}, {/sep}
 						{/foreach}
 					</td>
 				</tr>
@@ -110,7 +110,7 @@
 					<li n:class="list-group-item">
 						<div class="list-group-item-heading">
 							<span class="glyphicon glyphicon-user"></span>
-							<a class="ajax" n:href="User:detail $comment->user->nick">{$comment->user->nick}</a>
+							<a n:href="User:detail $comment->user->nick">{$comment->user->nick}</a>
 							{$comment->user->role|role}
 							<span class="pull-right">
 								<span class="glyphicon glyphicon-time"></span> {$comment->time|time}

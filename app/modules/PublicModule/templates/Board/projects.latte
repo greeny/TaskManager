@@ -1,6 +1,6 @@
 {#content}
 <ol class="breadcrumb">
-	<li><a class="ajax" n:href="Dashboard:default">Nástěnka</a></li>
+	<li><a n:href="Dashboard:default">Nástěnka</a></li>
 	<li class="active">Seznam projektů</li>
 </ol>
 
@@ -29,7 +29,7 @@
 	</thead>
 	<tbody>
 		<tr n:foreach="$projects as $project">
-			<td><a class="ajax" n:href="Board:project $project->id">{$project->name}</a></td>
+			<td><a n:href="Board:project $project->id">{$project->name}</a></td>
 			<td>{$project->description|truncate:100}</td>
 			<td>{count($project->categories)}</td>
 			<td>{$project->getTaskCount($user->id)}</td>

@@ -25,17 +25,6 @@ abstract class BasePresenter extends Presenter
 	/** @var \TaskManager\Model\NotificationFacade */
 	protected $notificationFacade;
 
-	public function startup()
-	{
-		parent::startup();
-		if($this->isAjax()) {
-			$this->invalidateControl('content');
-			$this->invalidateControl('navbar');
-			$this->invalidateControl('essentials');
-			$this->invalidateControl('scripts');
-		}
-	}
-
 	public function beforeRender()
 	{
 		parent::beforeRender();
@@ -74,8 +63,6 @@ abstract class BasePresenter extends Presenter
 
 	public function flashSuccess($message)
 	{
-		if($this->isAjax())
-			$this->invalidateControl('flashes');
 		return $this->flashMessage($message, 'success');
 	}
 
