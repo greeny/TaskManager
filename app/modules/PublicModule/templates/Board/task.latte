@@ -45,7 +45,7 @@
 			<thead>
 				<tr>
 					<td><b>Zadavatel</b></td>
-					<td>{? $u = $task->ref('users', 'user_id')}{$u->nick} {$u->role|role}</td>
+					<td>{? $u = $task->ref('users', 'user_id')}<a n:href="User:detail $u->id">{$u->nick}</a> {$u->role|role}</td>
 				</tr>
 			</thead>
 			<tbody>

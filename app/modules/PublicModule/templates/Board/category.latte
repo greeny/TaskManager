@@ -25,6 +25,7 @@
 			<th>Jméno</th>
 			<th>Popis</th>
 			<th>Zadavatel</th>
+			<th>Přiřazení uživatelé</th>
 			<th n:if="$user->isLoggedIn() && $user->identity->role != 'member'">Administrace</th>
 		</tr>
 	</thead>
@@ -33,6 +34,11 @@
 			<td>{$task->priority|priority} <a n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
 			<td><span data-tooltip title="{$task->description|truncate:100}">{$task->description|truncate:25}</span></td>
 			<td><a n:href="User:detail $task->user_id">{$task->user->nick}</a> {$task->user->role|role}</td>
+			<td>
+				{foreach $task->assignedUsers as $row}
+					<a n:href="User:detail $row->id">{$row->nick}</a> {$row->role|role}{sep}, {/sep}
+				{/foreach}
+			</td>
 			<td n:if="$user->isLoggedIn()">
 				<div class="btn-group">
 					<a class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">Akce <span class="caret"></span></a>

@@ -134,20 +134,22 @@ class TaskFacade extends Facade {
 			'name' => $data->name,
 			'user_id' => $userId,
 			'description' => $data->description,
-			'priority' => $data->priority,
 			'category_id' => $data->category_id,
-			'status' => Task::STATUS_ACTIVE,
 			'term' => ($data->term === '' ? NULL : DateTime::createFromFormat('d.m.Y', $data->term)),
 		);
 		if($data->id) {
 			$row = $this->tasks->find($data->id);
 			if($row) {
+				$array['priority'] = $row->priority;
+				$array['status'] = $row->status;
 				$row->update($array);
 				return $row;
 			} else {
 				return NULL;
 			}
 		} else {
+			$array['priority'] = in_array($data->priority, range(1,10)) ? $data->priority : 1;
+			$array['status'] = Task::STATUS_ACTIVE;
 			return $this->tasks->create($array);
 		}
 	}
