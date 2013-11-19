@@ -1,25 +1,33 @@
 {#content}
+{var $myTasks = $presenter->isLinkCurrent(':Public:User:tasks') ? FALSE : TRUE}
+{var $title = $myTasks ? 'Úkoly zadané mnou' : 'Úkoly přiřazené mně'}
 <ol class="breadcrumb">
 	<li><a n:href="Dashboard:default">Nástěnka</a></li>
-	<li class="active">Moje úkoly</li>
+	<li class="active">{$title}</li>
 </ol>
 
 <div class="page-header">
-	<h1>Moje úkoly</h1>
+	<h1>{$title}</h1>
 </div>
 
 <div class="table-responsive"><table class="table">
 	<thead>
 		<tr>
 			<th>Název</th>
-			<th>Zadavatel</th>
+			<th n:if="!$myTasks">Zadavatel</th>
+			<th n:if="$myTasks">Přiřazení uživatelé</th>
 			<th>Projekt -> Kategorie</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr n:foreach="$tasks as $task">
 			<td>{$task->priority|priority} <a n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
-			<td><a n:href="User:detail $task->user_id">{$task->owner->nick}<a/> {$task->owner->role|role}</td>
+			<td n:if="!$myTasks"><a n:href="User:detail $task->user_id">{$task->owner->nick}<a/> {$task->owner->role|role}</td>
+			<td n:if="$myTasks">
+				{foreach $task->assignedUsers as $row}
+					<a n:href="User:detail $row->id">{$row->nick}</a> {$row->role|role}{sep}, {/sep}
+				{/foreach}
+			</td>
 			<td><a n:href="Board:project $task->parent->parent->id">{$task->parent->parent->name}</a> -> <a n:href="Board:category $task->parent->id">{$task->parent->name}</a></td>
 		</tr>
 	</tbody>

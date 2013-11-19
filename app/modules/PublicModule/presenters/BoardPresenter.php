@@ -11,14 +11,6 @@ use TaskManager\Model\TaskFacade;
 
 class BoardPresenter extends BasePublicPresenter {
 
-	/** @var \TaskManager\Model\TaskFacade */
-	protected $taskFacade;
-
-	public function inject(TaskFacade $taskFacade)
-	{
-		$this->taskFacade = $taskFacade;
-	}
-
 	public function renderProjects($page = 1)
 	{
 		$paginator = $this->createPaginator($page);
@@ -148,6 +140,10 @@ class BoardPresenter extends BasePublicPresenter {
 		$form->addSelect('priority', 'Priorita', array_combine($a = range(1,10), $a));
 
 		$form->addHidden('category_id', $this->params['id']);
+
+		$form->addSelect('user_id', 'Uživatel', $this->taskFacade->getUsersArray())
+			->setPrompt('-- Vyber uživatele --')
+			->setRequired('Vyber prosím uživatele.');
 
 		$form->addSubmit('submit', 'Přidat úkol');
 

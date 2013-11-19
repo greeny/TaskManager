@@ -14,7 +14,7 @@
 			<p n:class="list-group-item-text">
 				<a n:href="User:detail id=>$notification->source_user_id">{$notification->sourceUser->nick}</a> {$notification->sourceUser->role|role}
 				{$notification->text}
-				<a n:href="Board:task id=>$notification->task_id">{$notification->task->name}</a>
+				<a n:href="Board:task id=>$notification->task_id">{$notification->task->name}</a> {$notification->task->status|status}
 				<span n:if="!$notification->seen" class="label label-success">NOVÝ</span>
 				<span class="pull-right">
 					({$notification->time|time})

@@ -25,9 +25,15 @@
 
 			<ul class="nav navbar-nav navbar-left">
 				<li n:class="$presenter->isLinkCurrent(':Public:Board:projects') ? active"><a n:href=":Public:Board:projects"><span class="glyphicon glyphicon-list"></span> Seznam projektů</a></li>
-				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:tasks') ? active"><a n:href=":Public:User:tasks"><span class="glyphicon glyphicon-tasks"></span> Moje úkoly <span class="badge">{$taskCount ?: ''}</span></a></li></li>
-				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:notifications') ? active"><a n:href=":Public:User:notifications"><span class="glyphicon glyphicon-exclamation-sign"></span> Upozornění <span class="badge">{$notificationCount ?: ''}</span></a></li></li>
-				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:sessions') ? active"><a n:href=":Public:User:sessions"><span class="glyphicon glyphicon-calendar"></span> Moje schůzky <span class="badge">{$sessionCount ?: ''}</span></a></li></li>
+				<li n:if="$user->isLoggedIn()" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-tasks"></span> Moje úkoly <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li n:class="$presenter->isLinkCurrent(':Public:User:tasks') ? active"><a n:href=":Public:User:tasks">Úkoly přiřazené mně <span class="badge">{$taskCount ?: ''}</span></a></li>
+						<li n:class="$presenter->isLinkCurrent(':Public:User:myTasks') ? active"><a n:href=":Public:User:myTasks">Úkoly zadané mnou <span class="badge">{$myTaskCount ?: ''}</span></a></li>
+					</ul>
+				</li>
+				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:notifications') ? active"><a n:href=":Public:User:notifications"><span class="glyphicon glyphicon-exclamation-sign"></span> Upozornění <span class="badge">{$notificationCount ?: ''}</span></a></li>
+				<li n:if="$user->isLoggedIn()" n:class="$presenter->isLinkCurrent(':Public:User:sessions') ? active"><a n:href=":Public:User:sessions"><span class="glyphicon glyphicon-calendar"></span> Moje schůzky <span class="badge">{$sessionCount ?: ''}</span></a></li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">

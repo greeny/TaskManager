@@ -72,6 +72,16 @@ class TaskFacade extends Facade {
 		return $task;
 	}
 
+	public function getTasksAddedByUser($user_id)
+	{
+		return $this->tasks->findBy('user_id', $user_id)->where('status !=', Task::STATUS_FINISHED);
+	}
+
+	public function countTasksAddedByUser($user_id)
+	{
+		return $this->getTasksAddedByUser($user_id)->count();
+	}
+
 	public function getCategory($categoryId)
 	{
 		if(!$category = $this->categories->find($categoryId)) {
@@ -137,6 +147,8 @@ class TaskFacade extends Facade {
 			'category_id' => $data->category_id,
 			'term' => ($data->term === '' ? NULL : DateTime::createFromFormat('d.m.Y', $data->term)),
 		);
+		$id = $data->user_id;
+		unset($data->user_id);
 		if($data->id) {
 			$row = $this->tasks->find($data->id);
 			if($row) {
@@ -150,7 +162,9 @@ class TaskFacade extends Facade {
 		} else {
 			$array['priority'] = in_array($data->priority, range(1,10)) ? $data->priority : 1;
 			$array['status'] = Task::STATUS_ACTIVE;
-			return $this->tasks->create($array);
+			$return = $this->tasks->create($array);
+			$this->addUserToTask($return->id, $id);
+			return $return;
 		}
 	}
 

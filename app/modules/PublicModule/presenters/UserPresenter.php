@@ -5,6 +5,7 @@
 namespace TaskManager\PublicModule;
 
 use Nette\Utils\Paginator;
+use TaskManager\Model\Task;
 use TaskManager\Model\TaskFacade;
 
 class UserPresenter extends BasePublicPresenter {
@@ -33,6 +34,12 @@ class UserPresenter extends BasePublicPresenter {
 	public function renderTasks()
 	{
 		$this->template->tasks = $this->taskFacade->getUsersUnfinishedTasks($this->user->id)->order('priority DESC, name ASC');
+	}
+
+	public function renderMyTasks()
+	{
+		$this->template->tasks = $this->taskFacade->getTasksAddedByUser($this->user->id)->order('priority DESC, name ASC');
+		$this->setView('tasks');
 	}
 
 	public function renderNotifications($page = 1)
