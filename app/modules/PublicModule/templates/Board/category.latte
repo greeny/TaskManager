@@ -32,7 +32,7 @@
 	<tbody>
 		<tr n:foreach="$tasks as $task" class="task-row-priority-{$task->priority}">
 			<td>{$task->priority|priority} <a n:href="Board:task $task->id">{$task->name}</a> {$task->status|status}</td>
-			<td><span data-tooltip title="{$task->description|truncate:100}">{$task->description|truncate:25}</span></td>
+			<td><span>{$task->description|truncate:25|texy}</span></td>
 			<td><a n:href="User:detail $task->user_id">{$task->user->nick}</a> {$task->user->role|role}</td>
 			<td>
 				{foreach $task->assignedUsers as $row}

@@ -8,12 +8,27 @@ use Nette\DateTime;
 use Nette\Object;
 use Nette\Templating\Template;
 use Nette\Utils\Html;
+use Nette\Utils\Strings;
 use TaskManager\Model\Task;
 
 class Helpers extends Object {
-
 	public static function prepareTemplate(Template $template)
 	{
+		$texy = new \Texy();
+		$template->registerHelper('texy', function($text) use($texy) {
+			$text = Strings::replace($text, '#--(.*?)--#', function($match){
+				return "<s>$match[1]</s>";
+			});
+			return Html::el('')->setHtml($texy->process($text));
+		});
+
+		$template->registerHelper('texyHelp', function() {
+			return Html::el('')->setHtml('**Tučné písmo**<br>
+			//Kurzíva//<br>
+			--Přeškrtnuté písmo--<br>
+			"Text odkazu":Cíl odkazu<br>');
+		});
+
 		$template->registerHelper('role', function($text) {
 			return (in_array($text, array('member'))) ? '' :
 				Html::el('span', array('class' => 'label label-role-'.$text))->setText(ucfirst($text));

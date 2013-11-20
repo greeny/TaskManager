@@ -90,7 +90,7 @@
 
 <div class="row">
 	<div class="col-lg-6">
-		{$task->description|nl2br}
+		{$task->description|texy}
 	</div>
 
 	<div class="col-lg-6">
@@ -115,7 +115,7 @@
 							<span class="pull-right">
 								<span class="glyphicon glyphicon-time"></span> {$comment->time|time}
 							</span>
-							<div class="list-group-item-text">{$comment->text|nl2br}</div>
+							<div class="list-group-item-text">{$comment->text|texy}</div>
 						</div>
 					</li>
 				{/foreach}
@@ -140,6 +140,7 @@
 				{form addTaskForm, class => 'ajax'}
 					<div class="modal-body">
 						<div class="form-group">{label name}{/label}{input name, class => 'form-control', value => $task->name}</div>
+						<span data-tooltip title="{$task|texyHelp}"><span class="glyphicon glyphicon-question-sign"></span></span>
 						<div class="form-group">{label description}{/label}{? echo $_form["description"]->getControl()->addAttributes(array('class' => 'form-control'))->setHtml($task->description)}</div>
 						<div class="form-group">{label term}{/label}{input term, class => 'form-control input-datepicker', value => ($task->term ? $task->term->format('d.m.Y') : '')}</div>
 					</div>
