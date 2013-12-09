@@ -132,7 +132,8 @@ class BoardPresenter extends BasePublicPresenter {
 		$form->addText('name', 'Název')
 			->setRequired('Prosím vyplň název.');
 
-		$form->addTextArea('description', 'Popis');
+		$form->addTextArea('description', 'Popis')
+			->setAttribute('rows', 10);
 
 		$form->addText('term', 'Termín')
 			->setAttribute('autocomplete', 'off');

@@ -72,7 +72,7 @@
 								<span class="add-on">@</span>{input $name}
 							</div>
 						{else}
-							{input $name class=>form-control}
+							{input $name class=>array_merge((array)'form-control', (array)$control->controlPrototype->class)}
 						{/if}
 						{!$error}
 						{!$description}

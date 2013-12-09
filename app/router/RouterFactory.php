@@ -4,8 +4,7 @@ namespace TaskManager\Routing;
 
 use Nette,
 	Nette\Application\Routers\RouteList,
-	Nette\Application\Routers\Route,
-	Nette\Application\Routers\SimpleRouter;
+	Nette\Application\Routers\Route;
 
 
 /**
@@ -21,9 +20,10 @@ class RouterFactory
 	{
 		$router = new RouteList();
 
-		$router[] = new Route('<action>[/<id [0-9]+>]', array(
-			'module' => 'Public',
-			'presenter' => 'Board',
+		$router[] = new Route('<projectId [0-9]+>/<presenter>/<action>[/<id>]', array(
+			'module' => 'Project',
+			'presenter' => 'Dashboard',
+			'action' => 'default',
 		));
 
 		$router[] = new Route('<presenter>/<action>[/<id>]', array(

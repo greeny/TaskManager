@@ -6,6 +6,7 @@ namespace TaskManager\PublicModule;
 
 use Nette\Application\UI\Form;
 use TaskManager\Model\ChatFacade;
+use TaskManager\PublicModule\Forms\SendChatMessageForm;
 
 class DashboardPresenter extends BasePublicPresenter {
 
@@ -14,13 +15,6 @@ class DashboardPresenter extends BasePublicPresenter {
 
 	public function renderDefault($page = 1, $chat = false, $lastTime = 0)
 	{
-		if($chat) {
-			$this->invalidateControl('chat');
-			$this->invalidateControl('chatScript');
-			$this->validateControl('content');
-			$this->validateControl('navbar');
-			$this->validateControl('essentials');
-		}
 		$this->template->chats = $this->chatFacade->getChats($page);
 		$this->template->lastChatTime = $lastTime === 0 ? Time() : $lastTime;
 		$this->template->newLastChatTime = Time();
@@ -34,13 +28,7 @@ class DashboardPresenter extends BasePublicPresenter {
 
 	public function createComponentSendChatMessageForm()
 	{
-		$form = new Form;
-
-		$form->addText('message', 'Zpráva:')
-			->setRequired('Prosím vyplň zprávu.');
-
-		$form->addSubmit('send', 'Poslat');
-
+		$form = new SendChatMessageForm();
 		$form->onSuccess[] = $this->sendChatMessageFormSuccess;
 		return $form;
 	}

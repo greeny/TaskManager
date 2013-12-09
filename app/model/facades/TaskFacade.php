@@ -14,24 +14,29 @@ class TaskFacade extends Facade {
 	protected $tasks;
 
 	/** @var \TaskManager\Model\Categories */
-	protected $categories;
+	//protected $categories;
 
 	/** @var \TaskManager\Model\Projects */
-	protected $projects;
+	//protected $projects;
 
 	/** @var \TaskManager\Model\Users */
-	protected $users;
+	//protected $users;
 
 	/** @var \TaskManager\Model\Groups */
-	protected $groups;
+	//protected $groups;
 
 	/** @var \TaskManager\Model\TaskUsers */
-	protected $taskUsers;
+	//protected $taskUsers;
 
 	/** @var \TaskManager\Model\TaskComments */
-	protected $taskComments;
+	//protected $taskComments;
 
-	public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups, TaskUsers $taskUsers, TaskComments $taskComments)
+	public function __construct(Tasks $tasks)
+	{
+		$this->tasks = $tasks;
+	}
+
+	/*public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups, TaskUsers $taskUsers, TaskComments $taskComments)
 	{
 		$this->tasks = $tasks;
 		$this->categories = $categories;
@@ -248,7 +253,7 @@ class TaskFacade extends Facade {
 	public function getTaskById($id)
 	{
 		return $this->tasks->find($id);
-	}
+	}*/
 }
 
 class NotFoundException extends \Exception {}

@@ -1,3 +1,8 @@
+function dump(v) {
+    console.log(v);
+    return v;
+}
+
 function fillValues(id, values) {
     var $form = $(id);
     for(var key in values) {
@@ -11,59 +16,136 @@ function fillValues(id, values) {
     }
 }
 
+function toggleFolder(id, modify, animate) {
+    if(typeof(Storage) !== 'undefined') {
+        if(typeof(modify) === 'undefined') {
+            modify = true;
+        }
+        if(modify != false) {
+            var did = false;
+            for(var key in JSON.parse(localStorage.closedFolders)) {
+                if(key == id) {
+                    var arr = JSON.parse(localStorage.closedFolders);
+                    delete arr[key];
+                    localStorage.closedFolders = JSON.stringify(arr);
+                    did = true;
+                }
+            }
+            if(did == false) {
+                var arr = JSON.parse(localStorage.closedFolders);
+                arr[id] = 'closed';
+                localStorage.closedFolders = JSON.stringify(arr);
+            }
+        }
+    }
+
+    animate = typeof(animate) === 'undefined' ? 150 : animate;
+
+    $item = $('#folder-'+id);
+
+    $item.parent().children('ul').animate({
+        height: 'toggle'
+    }, animate);
+    $item.toggleClass('icon-folder-open');
+    $item.toggleClass('icon-folder-close');
+}
+
+function togglePanel(animate) {
+    if(typeof(animate) === 'undefined') {
+        animate = 350;
+    } else {
+        animate = 0;
+    }
+    var $icon = $('#left-panel-toggle-icon');
+    var $panel = $('#left-panel');
+    var $tabs = $('#left-tabs');
+    var $content = $('#content');
+
+    if($icon.hasClass('icon-chevron-left')) {
+        $panel.animate({
+            left: '-25%'
+        }, animate, 'swing', function(){
+            var $icon = $('#left-panel-toggle-icon');
+            $icon
+                .removeClass('icon-chevron-left')
+                .addClass('icon-chevron-right');
+        });
+
+        $tabs.animate({
+            left: -30
+        }, animate);
+
+        $content.animate({
+            left: -30
+        }, animate);
+
+        if(typeof(Storage) !== 'undefined') {
+            localStorage.panel = 'collapsed';
+        }
+    } else {
+        $panel.animate({
+            left: 0
+        }, animate, 'swing', function(){
+            var $icon = $('#left-panel-toggle-icon');
+            $icon
+                .removeClass('icon-chevron-right')
+                .addClass('icon-chevron-left');
+        });
+
+        $tabs.animate({
+            left: '20%'
+        }, animate);
+
+        $content.animate({
+            left: '20%'
+        }, animate);
+
+        if(typeof(Storage) !== 'undefined') {
+            localStorage.panel = 'expanded';
+        }
+    }
+}
+
 $(document).on('ready', function(){
-    $resizable = $(".resizable");
-    $resizable.resizable({
-        alsoResize: '.resizable .resizable-iframe'
+    var $toggle = $('#left-panel-toggle');
+    var $tabs = $('#left-tabs');
+
+    if(typeof(Storage) !== 'undefined') {
+        if(typeof(localStorage.panel) === 'undefined') {
+            localStorage.panel = 'expanded';
+        }
+
+        if(typeof(localStorage.closedFolders) === 'undefined') {
+            localStorage.closedFolders = JSON.stringify({});
+        }
+
+        if(localStorage.panel === 'collapsed') {
+            togglePanel(false);
+        }
+
+        for(var id in JSON.parse(localStorage.closedFolders)) {
+            toggleFolder(id, false, 0);
+        }
+    }
+
+    $toggle.on('click', function(){
+        togglePanel();
+        return false;
     });
 
-    $('#vote1').hover(function(){
-        for(var j = 1; j <= 1; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
-        }
-    }, function(){
-        for(var j = 1; j <= 1; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
-        }
-    });
-
-    $('#vote2').hover(function(){
-        for(var j = 1; j <= 2; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
-        }
-    }, function(){
-        for(var j = 1; j <= 2; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
-        }
-    });
-
-    $('#vote3').hover(function(){
-        for(var j = 1; j <= 3; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
-        }
-    }, function(){
-        for(var j = 1; j <= 3; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
-        }
-    });
-
-    $('#vote4').hover(function(){
-        for(var j = 1; j <= 4; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
-        }
-    }, function(){
-        for(var j = 1; j <= 4; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
+    $('li.auto-expand').on('click', 'a', function(){
+        if(typeof(Storage) !== 'undefined') {
+            if(localStorage.panel === 'collapsed') {
+                localStorage.panel = 'expanded';
+            }
         }
     });
 
-    $('#vote5').hover(function(){
-        for(var j = 1; j <= 5; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
-        }
-    }, function(){
-        for(var j = 1; j <= 5; j++) {
-            $('#vote' + j).removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
-        }
+    $('a[data-confirm]').on('click', function(){
+        return confirm($(this).data('confirm'));
+    });
+
+    $('[data-folder]').on('click', function(){
+        toggleFolder($(this).data('folder'), true, 150);
     });
 });

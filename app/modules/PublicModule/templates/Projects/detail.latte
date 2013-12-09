@@ -1,0 +1,18 @@
+{#content}
+<div class="page-header">
+	<h1>Detail projektu {$p->name}</h1>
+</div>
+
+<dt>Úroveň přístupu</dt>
+<dd>{$p->access_type === \TaskManager\Model\Project::ACCESS_PRIVATE ? 'Soukromý' : 'Veřejný'}</dd>
+
+{if $p->access_type === \TaskManager\Model\Project::ACCESS_PRIVATE}
+	<dt>Přiřazení uživatelé</dt>
+	<dd>
+		{foreach $p->assignedUsers as $user}
+			{include #user, user => $user}
+			{sep}, {/sep}
+		{/foreach}<br>
+		<span class="icon-plus"></span>&nbsp;<a href="#">Přidat uživatele</a>
+	</dd>
+{/if}

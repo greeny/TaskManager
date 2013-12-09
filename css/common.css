@@ -11,6 +11,110 @@ body {
     text-decoration: none;
 }
 
+.btn-micro {
+	line-height: 16px;
+	padding: 0 6px;
+	font-size: 8px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+
+.folder {
+	cursor: pointer;
+}
+
+.btn-micro .caret {
+	margin-top: 6px;
+}
+
+li.auto-expand .text {
+	display: none;
+}
+
+li.auto-expand:hover .text {
+	display: inline;
+}
+
+.list-no-style {
+	list-style: none;
+}
+
+.list-no-margin {
+	margin-left: 0;
+}
+
+.folder-list {
+	list-style: none;
+	margin-left: 5px;
+}
+
+.folder-list li {
+	border-left: 1px solid #ddd;
+	padding-left: 10px;
+}
+
+.folder-list ul.dropdown-menu li {
+	padding-left: 0;
+	border-left: 0;
+}
+
+.left-panel {
+	position: fixed;
+	top: 40px;
+	padding: 10px 10px 10px 15px;
+	width: 20%;
+	bottom: 0;
+	overflow: auto;
+}
+
+#left-panel-toggle-icon {
+	cursor: pointer;
+}
+
+.left-tabs {
+	position: fixed;
+	height: 100%;
+	top: 0;
+	left: 20%;
+	padding-left: 10px;
+}
+
+.left-tabs-inner {
+	padding-top: 50px;
+	height: 100%;
+	min-width: 10px;
+}
+
+.left-tabs-inner li {
+	display: table;
+}
+
+.left-tabs-inner .divider-vertical {
+	margin-bottom: 10px;
+}
+
+.left-tabs-inner a {
+	min-width: 15px !important;
+	border-top: 1px solid #ddd !important;
+	border-bottom: 1px solid #ddd !important;
+	border-right: 1px solid #ddd !important;
+}
+
+.content {
+	position: absolute;
+	top: 50px;
+	left: 20%;
+	right: 10px;
+	margin-left: 90px;
+}
+
+.chatbox {
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 10px;
+}
+
 .form-add-margin {
     margin-left: 15px;
     margin-right: 15px;
@@ -89,6 +193,9 @@ body {
 
 .close-nofloat {
     float: none;
+	vertical-align: text-bottom;
+	font-size: 20px;
+	line-height: 15px;
 }
 
 .loading {

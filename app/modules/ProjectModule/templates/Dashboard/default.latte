@@ -1,0 +1,41 @@
+{#content}
+<div class="page-header">
+	<h1>Projekt {$project->name}</h1>
+	<div n:if="$user->isAllowed('project', 'edit')" class="btn-group pull-left">
+		<a class="btn btn-mini btn-warning" n:href=":Public:Projects:edit $project->id"><span class="icon-pencil" data-tooltip title="Upravit projekt {$project->name}"></span></a>
+		<a class="btn btn-mini btn-danger" n:href=":Public:Projects:edit do => delete, id => $project->id" data-confirm="Opravdu chcete smazat projekt {$project->name}?"><span class="icon-remove" data-tooltip title="Odstranit projekt {$project->name}"></span></a>
+	</div>
+</div>
+
+<dt>Počet úkolů</dt>
+<dd>{$taskCount}</dd>
+<br>
+
+<dt>Počet složek</dt>
+<dd>{$folderCount}</dd>
+<br>
+
+<dt>Vlastník</dt>
+<dd>
+	{include #user, user => $project->user}
+</dd>
+<br>
+
+<dt>Přístup</dt>
+<dd>
+	{if $project->access_type === \TaskManager\Model\Project::ACCESS_PUBLIC}
+		Veřejný
+	{else}
+		Soukromý, pouze pro následující uživatele:<br>
+		<ul>
+			<li n:foreach="$project->getAssignedUsers() as $u">
+				{include #user, user => $u}
+				<span class="close close-nofloat" data-tooltip title="Odstranit uživatele {$u->nick} z projektu">
+					<a class="nolink" n:href="deleteUser! user => $u->id">&times;</a>
+				</span>
+			</li>
+		</ul>
+		<hr>
+		{control addUserToProjectForm}
+	{/if}
+</dd>

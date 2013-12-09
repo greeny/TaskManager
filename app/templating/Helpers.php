@@ -4,7 +4,6 @@
  */
 namespace TaskManager\Templating;
 
-use Nette\DateTime;
 use Nette\Object;
 use Nette\Templating\Template;
 use Nette\Utils\Html;
@@ -23,10 +22,14 @@ class Helpers extends Object {
 		});
 
 		$template->registerHelper('texyHelp', function() {
-			return Html::el('')->setHtml('**Tučné písmo**<br>
+			$return = Html::el('span')
+				->setClass('glyphicon glyphicon-question-sign help');
+			$return->{'data-tooltip'} = TRUE;
+			$return->title = '**Tučné písmo**<br>
 			//Kurzíva//<br>
 			--Přeškrtnuté písmo--<br>
-			"Text odkazu":Cíl odkazu<br>');
+			"Text odkazu":Cíl odkazu<br>';
+			return $return;
 		});
 
 		$template->registerHelper('role', function($text) {
@@ -100,7 +103,6 @@ class Helpers extends Object {
 		});
 
 		$template->registerHelper('time', function($text) {
-			$text = (int) $text;
 			return date('j.n.Y G:i:s', $text);
 		});
 

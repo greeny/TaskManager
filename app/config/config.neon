@@ -26,6 +26,7 @@ database:
 			projects: TaskManager\Model\Project
 			categories: TaskManager\Model\Category
 			tasks: TaskManager\Model\Task
+			folders: TaskManager\Model\Folder
 			taskUsers: TaskManager\Model\TaskUser
 			notifications: TaskManager\Model\Notification
 			users: TaskManager\Model\User
@@ -39,18 +40,23 @@ services:
 	- TaskManager\Model\Tasks
 	- TaskManager\Model\Categories
 	- TaskManager\Model\Projects
+	- TaskManager\Model\ProjectAccess
+	- TaskManager\Model\Folders
 	- TaskManager\Model\TaskUsers
 	- TaskManager\Model\TaskComments
 	- TaskManager\Model\Notifications
 
 	## facades ##
 	- TaskManager\Model\UserFacade
+	- TaskManager\Model\ProjectFacade
 	- TaskManager\Model\NotificationFacade
+	- TaskManager\Model\FolderFacade
 	- TaskManager\Model\TaskFacade
 	- TaskManager\Model\ChatFacade
 
 	## other ##
 	- TaskManager\Security\Authenticator
+	- TaskManager\Security\Authorizator
 	- TaskManager\Controls\MailSender
 
 	- TaskManager\Routing\RouterFactory

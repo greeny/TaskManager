@@ -1,0 +1,41 @@
+{#content}
+<div class="page-header">
+	<h1>Seznam projektů</h1>
+</div>
+
+<a class="btn btn-success" n:href="Projects:create"><span class="icon-plus"></span> Vytvořit nový projekt</a>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th n:if="$user->isAllowed('project', 'edit')">Akce</th>
+			<th>Projekt</th>
+			<th>Vlastník</th>
+			<th>Popis</th>
+			<th>Datum a čas vytvoření</th>
+			<th>Přístup</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr n:foreach="$projects as $pr">
+			<td n:if="$user->isAllowed('project', 'edit')">
+				<div class="btn-group">
+					<a class="btn btn-mini btn-warning" n:href="Projects:edit $pr->id"><span class="icon-pencil" data-tooltip title="Upravit projekt {$pr->name}"></span></a>
+					<a class="btn btn-mini btn-danger" n:href="delete! $pr->id" data-confirm="Opravdu chcete smazat projekt {$pr->name}?"><span class="icon-remove" data-tooltip title="Odstranit projekt {$pr->name}"></span></a>
+				</div>
+			</td>
+			<td>{include #project, project => $pr}</td>
+			<td>{include #user, user => $pr->user}</td>
+			<td><span data-tooltip title="{$pr->description|truncate:150}">{$pr->description ?: 'Nezadán'|truncate:50}</span></td>
+			<td>{$pr->time|time}</td>
+			<td>
+				{if $pr->access_type === \TaskManager\Model\Project::ACCESS_PUBLIC}
+					Veřejný
+				{else}
+					Soukromý
+				{/if}
+			</td>
+
+		</tr>
+	</tbody>
+</table>

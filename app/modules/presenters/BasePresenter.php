@@ -7,6 +7,7 @@ use TaskManager\Controls\MailSender;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
 use TaskManager\Model\NotificationFacade;
+use TaskManager\Model\ProjectFacade;
 use TaskManager\Model\RegisterException;
 use TaskManager\Model\TaskFacade;
 use TaskManager\Model\UserFacade;
@@ -17,6 +18,10 @@ use TaskManager\Templating\Helpers;
  */
 abstract class BasePresenter extends Presenter
 {
+	/** @var \TaskManager\Model\ProjectFacade */
+	protected $projectFacade;
+
+
 	/** @var \TaskManager\Model\UserFacade */
 	protected $userFacade;
 
@@ -33,13 +38,13 @@ abstract class BasePresenter extends Presenter
 	{
 		parent::beforeRender();
 		Helpers::prepareTemplate($this->template);
-		/** @var \TaskManager\Model\User $u */
-		$u = $this->userFacade->getUserById($this->user->id);
-		if($u) {
-			$this->template->taskCount = $u->countUnfinishedTasks();
+
+		if($this->user->isLoggedIn()) {
+			$this->template->projects = $this->projectFacade->getProjectsVisibleByUser($this->user->id);
+			/*$this->template->taskCount = $u->countUnfinishedTasks();
 			$this->template->myTaskCount = $this->taskFacade->countTasksAddedByUser($u->id);
 			$this->template->notificationCount = $u->countNewNotifications();
-			$this->template->sessionCount = $u->countSessions();
+			$this->template->sessionCount = $u->countSessions();*/
 		}
 	}
 
@@ -52,8 +57,9 @@ abstract class BasePresenter extends Presenter
 		$this->redirect(":Public:Dashboard:default");
 	}
 
-	public function injectBase(MailSender $mailSender, UserFacade $userFacade, NotificationFacade $notificationFacade, TaskFacade $taskFacade)
+	public function injectBase(ProjectFacade $projectFacade, MailSender $mailSender, UserFacade $userFacade, NotificationFacade $notificationFacade, TaskFacade $taskFacade)
 	{
+		$this->projectFacade = $projectFacade;
 		$this->mailSender = $mailSender;
 		$this->userFacade = $userFacade;
 		$this->notificationFacade = $notificationFacade;
