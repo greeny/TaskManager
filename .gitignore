@@ -3,6 +3,7 @@ temp/*
 
 .idea
 .maintenance
+.debug
 
 libs/Nette
 
