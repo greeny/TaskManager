@@ -36,6 +36,11 @@ class TaskFacade extends Facade {
 		$this->tasks = $tasks;
 	}
 
+	public function getTaskById($id)
+	{
+		return $this->tasks->find($id);
+	}
+
 	/*public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups, TaskUsers $taskUsers, TaskComments $taskComments)
 	{
 		$this->tasks = $tasks;

@@ -17,6 +17,9 @@ class TreeItem extends Object {
 	/** @var \TaskManager\Model\Folder */
 	protected $folder;
 
+	/** @var array */
+	protected $tasks = array();
+
 	public function __construct(Folder $folder, TreeItem $parent = NULL)
 	{
 		$this->folder = $folder;
@@ -66,6 +69,27 @@ class TreeItem extends Object {
 	public function isChild(Folder $folder)
 	{
 		return (bool) (($this->folder->left < $folder->left) && ($this->folder->right > $folder->right));
+	}
+
+	/**
+	 * @param Task $task
+	 * @return $this
+	 */
+	public function addTask(Task $task)
+	{
+		$this->tasks[] = $task;
+		return $this;
+	}
+
+	/**
+	 * @return array of Task
+	 */
+	public function getTasks()
+	{
+		usort($this->tasks, function(Task $t1, Task $t2) {
+			return strcoll($t1->name, $t2->name);
+		});
+		return $this->tasks;
 	}
 
 	/**

@@ -1,0 +1,35 @@
+{#content}
+<div class="page-header">
+	<h1>Seznam úkolů ve složce <abbr data-tooltip title="/{$folderTree->find($folder->id)->getPath()}">{$folder->name}</abbr></h1>
+</div>
+
+<a n:href="Tasks:create id=>$folder->id" class="btn btn-success"><span class="icon-plus"></span> Vytvořit nový úkol</a>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Akce</th>
+			<th>Úkol</th>
+			<th>Zadavatel</th>
+			<th>Zadáno</th>
+		</tr>
+	</thead>
+	<tbody>
+		{if !count($tasks)}
+			<tr>
+				<td colspan="5"><div class="text-center"><i>Žádné úkoly nenalezeny</i></div></td>
+			</tr>
+		{/if}
+		<tr n:foreach="$tasks as $task">
+			<td>
+				<div class="btn-group">
+					<a n:href="Tasks:edit id => $task->id" class="btn btn-mini btn-warning"><span class="icon-pencil" data-tooltip title="Upravit úkol {$task->name}"></span></a>
+					<a n:href="delete! id => $task->id" class="btn btn-mini btn-danger" data-confirm="Opravdu chcete odstranit úkol {$task->name}?"><span class="icon-remove" data-tooltip title="Odstranit úkol {$task->name}"></span></a>
+				</div>
+			</td>
+			<td>{include #task, task => $task}</td>
+			<td>{include #user, user => $task->user}</td>
+			<td><span class="icon-time"></span> {$task->time|time}</td>
+		</tr>
+	</tbody>
+</table>

@@ -48,6 +48,11 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
+	public function getParamByName($name)
+	{
+		return $this->params[$name];
+	}
+
 	public function handleLogout()
 	{
 		if($this->user->isLoggedIn()) {

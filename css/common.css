@@ -20,7 +20,7 @@ body {
 	border-radius: 2px;
 }
 
-.folder {
+[data-folder] {
 	cursor: pointer;
 }
 

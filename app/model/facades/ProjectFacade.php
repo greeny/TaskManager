@@ -29,7 +29,10 @@ class ProjectFacade extends Facade {
 	/** @var \TaskManager\Model\Tasks */
 	protected $tasks;
 
-	public function __construct(Connection $connection, Users $users, Projects $projects, Folders $folders, ProjectAccess $projectAccess, Tasks $tasks)
+	/** @var \TaskManager\Model\TaskAccess */
+	protected $taskAccess;
+
+	public function __construct(Connection $connection, Users $users, Projects $projects, Folders $folders, ProjectAccess $projectAccess, Tasks $tasks, TaskAccess $taskAccess)
 	{
 		$this->connection = $connection;
 		$this->projects = $projects;
@@ -37,6 +40,7 @@ class ProjectFacade extends Facade {
 		$this->projectAccess = $projectAccess;
 		$this->users = $users;
 		$this->tasks = $tasks;
+		$this->taskAccess = $taskAccess;
 	}
 
 	/**
@@ -54,7 +58,7 @@ class ProjectFacade extends Facade {
 	 */
 	public function getProjectsVisibleByUser($userId)
 	{
-		$accessible = array_values($this->projectAccess->findBy('user_id', $userId)->fetchPairs('id', 'id'));
+		$accessible = array_values($this->projectAccess->findBy('user_id', $userId)->fetchPairs('id', 'project_id'));
 		return $this->projects->findBy('(`access_type` = ?) OR (`id` IN ?) OR (`user_id` = ?)', Project::ACCESS_PUBLIC, $accessible, $userId);
 	}
 
@@ -85,6 +89,7 @@ class ProjectFacade extends Facade {
 			'user_id' => $userId,
 			'folder_id' => $rootFolder->id,
 			'name' => $data->name,
+			'description' => $data->description,
 			'time' => Time(),
 			'access_type' => in_array($data->access_type, array(Project::ACCESS_PUBLIC, Project::ACCESS_PRIVATE)) ? $data->access_type : Project::ACCESS_PUBLIC,
 		));
@@ -184,5 +189,49 @@ class ProjectFacade extends Facade {
 	public function getFolderIds($project)
 	{
 		return array_values($this->getFoldersInProject($project)->fetchPairs('id', 'id'));
+	}
+
+	public function getTree($projectId, $userId)
+	{
+		$root = $this->projects->find($projectId)->ref('folders', 'folder_id');
+
+		/** @var \Fabik\Database\Selection $foldersTable */
+		$foldersTable = $root->getTable();
+		$folders = $foldersTable->createSelectionInstance()->where('(`left` >= ?) AND (`right` <= ?)', $root->left, $root->right)->order('left ASC');
+
+		$stack = new \SplStack();
+		$root = NULL;
+		$current = NULL;
+
+		foreach($folders as $folder) {
+			$stack->push($folder);
+			if($root === NULL) {
+				$current = $root = new TreeItem($folder);
+			} else {
+				while(!$current->isChild($folder)) {
+					if(!$current = $current->getParent()) {
+						break 2;
+					}
+				}
+				$current = $current->addChild($stack->pop());
+			}
+		}
+
+		$folderIds = $root->getIds();
+
+		$taskIds = array_values($this->taskAccess->findBy('user_id', $userId)->fetchPairs('id', 'task_id'));
+		$tasks = $this->tasks->findBy('(access_type = ? OR id IN ? OR user_id = ?) AND folder_id IN ?', Task::ACCESS_PUBLIC, $taskIds, $userId, $folderIds);
+
+		foreach($tasks as $task) {
+			$root->find($task->folder_id)->addTask($task);
+		}
+
+		return $root;
+	}
+
+	public function getTasksInFolder($folderId, $userId)
+	{
+		$taskIds = array_values($this->taskAccess->findBy('user_id', $userId)->fetchPairs('id', 'task_id'));
+		return $this->tasks->findBy('(access_type = ? OR id IN ? OR user_id = ?) AND folder_id = ?', Task::ACCESS_PUBLIC, $taskIds, $userId, $folderId);
 	}
 }

@@ -43,6 +43,7 @@ services:
 	- TaskManager\Model\ProjectAccess
 	- TaskManager\Model\Folders
 	- TaskManager\Model\TaskUsers
+	- TaskManager\Model\TaskAccess
 	- TaskManager\Model\TaskComments
 	- TaskManager\Model\Notifications
 

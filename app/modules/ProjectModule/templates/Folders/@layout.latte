@@ -4,7 +4,7 @@
 
 <ul class="list-no-style list-no-margin" id="root-folder">
 	<li>
-		<span class="icon-list-alt"></span> {$project->name}
+		<span class="icon-list-alt"></span> <b>{$project->name}</b>
 		<div class="btn-group">
 			<a class="btn btn-micro dropdown-toggle" data-toggle="dropdown" href="#">
 				<span class="caret"></span>
@@ -13,9 +13,9 @@
 				<li n:if="$user->isAllowed('folder', 'create')"><a n:href="Folders:create id=>$project->folder_id"><span class="icon-folder-close"></span> Vytvořit podsložku</a></li>
 				<li class="divider"></li>
 				<li n:if="$user->isAllowed('task', 'create')"><a n:href="Tasks:create id=>$project->folder_id"><span class="icon-file"></span> Přidat úkol</a></li>
-				<li n:if="$user->isAllowed('task', 'view')"><a n:href="Tasks:list id=>$project->folder_id"><span class="icon-list"></span> Vypsat úkoly</a></li>
+				<li n:if="$user->isAllowed('task', 'view')"><a n:href="Folders:list id=>$project->folder_id"><span class="icon-list"></span> Vypsat úkoly</a></li>
 			</ul>
 		</div>
 	</li>
-	{include #treeItem, item => $project->getFolderTree()}
+	{include #treeItem, item => $folderTree}
 </ul>

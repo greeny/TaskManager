@@ -13,6 +13,9 @@ class Task extends ActiveRow {
 	const STATUS_WONT_FIX = 5;
 	const STATUS_NEED_HELP = 6;
 
+	const ACCESS_PUBLIC = 1;
+	const ACCESS_PRIVATE = 2;
+
 	public function getParent()
 	{
 		return $this->ref('categories', 'category_id');

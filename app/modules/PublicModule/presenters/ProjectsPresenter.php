@@ -21,10 +21,10 @@ class ProjectsPresenter extends BasePublicPresenter {
 	public function createProjectFormSuccess(Form $form)
 	{
 		$v = $form->getValues();
-		try{
+		try {
 			$project = $this->projectFacade->createProject($v, $this->user->id);
 			$this->flashSuccess('Projekt byl vytvořen.');
-			$this->redirect(':Public:Projects:detail', array('id' => $project->id));
+			$this->redirect(':Project:Dashboard:default', array('projectId' => $project->id));
 		} catch(DuplicateEntryException $e) {
 			$this->flashError($e->getMessage());
 			$this->refresh();
@@ -44,8 +44,8 @@ class ProjectsPresenter extends BasePublicPresenter {
 		$v = $form->getValues();
 		try{
 			$this->projectFacade->editProject($this->params['id'], $v);
-			$this->flashSuccess('Projekt byl vytvořen.');
-			$this->redirect(':Public:Projects:detail', array('id' => $this->params['id']));
+			$this->flashSuccess('Projekt byl upraven.');
+			$this->redirect(':Project:Dashboard:default', array('projectId' => $this->params['id']));
 		} catch(DuplicateEntryException $e) {
 			$this->flashError($e->getMessage());
 			$this->refresh();

@@ -101,6 +101,12 @@
 						<span class="text">&nbsp;{$project->name} <span class="icon-chevron-right"></span> Složky</span>
 					</a>
 				</li>
+				<li n:class="auto-expand, $presenter->isLinkCurrent(':Project:Tasks:*') ? 'active'">
+					<a n:href="Tasks:list">
+						<span class="icon-tasks"></span>
+						<span class="text">&nbsp;{$project->name} <span class="icon-chevron-right"></span> Úkoly</span>
+					</a>
+				</li>
 			{/ifset}
 		</ul>
 	</div>
@@ -124,28 +130,40 @@
 </body>
 </html>
 {define treeItem}
-	{default $open = true}
 	<ul class="folder-list">
-		<li n:foreach="$item->getChildren() as $child" class="folder">
-			<span id="folder-{$child->getRow()->id}" data-folder="{$child->getRow()->id}" class="icon-folder-open"></span>
-			<span data-folder="{$child->getRow()->id}">{$child->row->name}</span>
-			<div class="btn-group">
-				<a class="btn btn-micro dropdown-toggle" data-toggle="dropdown" href="#">
-					<span class="caret"></span>
-				</a>
-				<ul class="dropdown-menu">
-					<li n:if="$user->isAllowed('folder', 'create')"><a n:href="Folders:create id=>$child->getRow()->id"><span class="icon-folder-close"></span> Vytvořit podsložku</a></li>
-					<li n:if="$user->isAllowed('folder', 'edit')"><a n:href="Folders:rename id=>$child->getRow()->id"><span class="icon-edit"></span> Přejmenovat</a></li>
-					<li n:if="$user->isAllowed('folder', 'delete')"><a data-confirm="Opravdu chcete smazat složku '{$child->getRow()->name}', všechny její podsložky a všechny úkoly v nich?" n:href="delete! id=>$child->getRow()->id"><span class="icon-remove"></span> Odstranit</a></li>
-					<li class="divider"></li>
-					<li n:if="$user->isAllowed('task', 'create')"><a n:href="Tasks:create id=>$child->getRow()->id"><span class="icon-file"></span> Přidat úkol</a></li>
-					<li n:if="$user->isAllowed('task', 'view')"><a n:href="Tasks:list id=>$child->getRow()->id"><span class="icon-list"></span> Vypsat úkoly</a></li>
+		{foreach $item->getChildren() as $child}
+			<li class="folder">
+				<b n:tag-if="$presenter->isLinkCurrent(':Project:Folders:*') && $presenter->getParamByName('id') == $child->getRow()->id">
+					<span id="folder-{$child->getRow()->id}" data-folder="{$child->getRow()->id}" class="icon-folder-open"></span>
+					<a n:href="Folders:list id=>$child->getRow()->id">{$child->row->name}</a>
+					<div class="btn-group">
+						<a class="btn btn-micro dropdown-toggle" data-toggle="dropdown" href="#">
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li n:if="$user->isAllowed('folder', 'create')"><a n:href="Folders:create id=>$child->getRow()->id"><span class="icon-folder-close"></span> Vytvořit podsložku</a></li>
+							<li n:if="$user->isAllowed('folder', 'edit')"><a n:href="Folders:rename id=>$child->getRow()->id"><span class="icon-edit"></span> Přejmenovat</a></li>
+							<li n:if="$user->isAllowed('folder', 'delete')"><a data-confirm="Opravdu chcete smazat složku '{$child->getRow()->name}', všechny její podsložky a všechny úkoly v nich?" n:href="delete! id=>$child->getRow()->id"><span class="icon-remove"></span> Odstranit</a></li>
+							<li class="divider"></li>
+							<li n:if="$user->isAllowed('task', 'create')"><a n:href="Tasks:create id=>$child->getRow()->id"><span class="icon-file"></span> Přidat úkol</a></li>
+							<li n:if="$user->isAllowed('task', 'view')"><a n:href="Folders:list id=>$child->getRow()->id"><span class="icon-list"></span> Vypsat úkoly</a></li>
+						</ul>
+					</div>
+				</b>
+				{include #treeItem, item => $child}
+				<ul class="folder-list">
+					<li n:foreach="$child->getTasks() as $task">{include #task, task => $task}</li>
 				</ul>
-			</div>
-			{if $open && count($child->getChildren())}{include #treeItem, item => $child}{/if}
-		</li>
+			</li>
+		{/foreach}
 	</ul>
 	{? unset($open)}
+{/define}
+{define task}
+	<b n:tag-if="$presenter->isLinkCurrent(':Project:Tasks:*') && $presenter->getParamByName('id') == $task->id">
+		<span class="icon-file-text-alt" data-tooltip title="Detail úkolu {$task->name}"></span>
+		<a n:href="Tasks:detail id=>$task->id">{$task->name}</a>
+	</b>
 {/define}
 {define user}
 	{if isset($user) && $user instanceof \TaskManager\Model\User}

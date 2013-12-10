@@ -28,6 +28,7 @@
 	{else}
 		Soukromý, pouze pro následující uživatele:<br>
 		<ul>
+			<li>{include #user, user => $project->user}</li>
 			<li n:foreach="$project->getAssignedUsers() as $u">
 				{include #user, user => $u}
 				<span class="close close-nofloat" data-tooltip title="Odstranit uživatele {$u->nick} z projektu">

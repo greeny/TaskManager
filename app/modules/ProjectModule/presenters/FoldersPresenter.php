@@ -20,6 +20,12 @@ class FoldersPresenter extends BaseProjectPresenter {
 		$this->folderFacade = $folderFacade;
 	}
 
+	public function beforeRender()
+	{
+		parent::beforeRender();
+		$this->template->folderTree = $this->projectFacade->getTree($this->projectId, $this->user->id);
+	}
+
 	public function createComponentCreateFolderForm()
 	{
 		$form = new CreateFolderForm;
@@ -75,6 +81,12 @@ class FoldersPresenter extends BaseProjectPresenter {
 		$this->folderFacade->renameFolder($this->params['id'], $form->getValues());
 		$this->flashSuccess('Složka byla přejenována.');
 		$this->refresh();
+	}
+
+	public function renderList($id)
+	{
+		$this->template->folder = $this->folderFacade->getFolderById($id);
+		$this->template->tasks = $this->projectFacade->getTasksInFolder($id, $this->user->id);
 	}
 }
  
