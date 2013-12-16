@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
 
-	<title>{#title}GameTeam.cz Úkolníček{/#}</title>
+	<title>{#title}{ifset $title}{$title} &raquo; {/ifset}GameTeam.cz Úkolníček{/#}</title>
 
 	<link rel="stylesheet" href="{$basePath}/css/bootstrap2.css">
 	<link rel="stylesheet" href="{$basePath}/css/bootstrap2-responsive.css">
