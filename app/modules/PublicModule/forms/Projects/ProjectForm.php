@@ -16,7 +16,7 @@ class ProjectForm extends BaseForm {
 		$form->addText('name', 'Jméno projektu')
 			->setRequired('Prosím zadej jméno projektu.');
 
-		$form->addTextArea('description', 'Popis');
+		$form->addTextEditor('description', 'Popis');
 
 		$form->addSelect('access_type', 'Úroveň přístupu', array(
 			Project::ACCESS_PUBLIC => 'Veřejný - je potřeba pouze přihlášení.',

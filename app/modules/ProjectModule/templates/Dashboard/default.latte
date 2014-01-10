@@ -23,7 +23,7 @@
 
 <dt>Přístup</dt>
 <dd>
-	{if $project->access_type === \TaskManager\Model\Project::ACCESS_PUBLIC}
+	{if (int)$project->access_type === \TaskManager\Model\Project::ACCESS_PUBLIC}
 		Veřejný
 	{else}
 		Soukromý, pouze pro následující uživatele:<br>

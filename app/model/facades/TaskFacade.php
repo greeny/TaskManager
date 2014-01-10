@@ -41,6 +41,27 @@ class TaskFacade extends Facade {
 		return $this->tasks->find($id);
 	}
 
+	public function createTask(ArrayHash $data, $userId, $folderId)
+	{
+		return $this->tasks->create(array(
+			'folder_id' => $folderId,
+			'user_id' => $userId,
+			'name' => $data->name,
+			'description' => $data->description,
+			'time' => Time(),
+			'access_type' => $data->access_type,
+		));
+	}
+
+	public function editTask($id, ArrayHash $data)
+	{
+		if(!$task = $this->tasks->find($id)) {
+			return FALSE;
+		}
+		$task->update($data);
+		return TRUE;
+	}
+
 	/*public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups, TaskUsers $taskUsers, TaskComments $taskComments)
 	{
 		$this->tasks = $tasks;

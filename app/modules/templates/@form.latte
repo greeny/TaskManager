@@ -63,6 +63,34 @@
 							{!$description}
 						</div>
 					{/#}
+				{elseif $control instanceof TaskManager\Controls\TextEditor}
+					{#textEditorControl}
+						{label $name, class => 'control-label' /}
+						<div class="controls text-editor-container">
+							<div class="text-editor-controls fade in">
+								<div class="btn-group">
+									<div class="btn btn-small" data-action="bold"><span data-tooltip title="Tučné písmo" class="icon-bold"></span></div>
+									<div class="btn btn-small" data-action="italic"><span data-tooltip title="Kurzíva" class="icon-italic"></span></div>
+									<div class="btn btn-small" data-action="underline"><span data-tooltip title="Podtržení" class="icon-underline"></span></div>
+									<div class="btn btn-small" data-action="strikethrough"><span data-tooltip title="Přeškrtnutí" class="icon-strikethrough"></span></div>
+									<div class="btn btn-small" data-action="code"><span data-tooltip title="Zdrojový kód" class="icon-code"></span></div>
+								</div>
+								<div class="btn-group">
+									<div class="btn btn-small" data-action="align-left"><span data-tooltip title="Zarovnat doleva" class="icon-align-left"></span></div>
+									<div class="btn btn-small" data-action="align-middle"><span data-tooltip title="Zarovnat na střed" class="icon-align-center"></span></div>
+									<div class="btn btn-small" data-action="align-bottom"><span data-tooltip title="Zarovnat doprava" class="icon-align-right"></span></div>
+								</div>
+								<div class="btn-group">
+									<div class="btn btn-small" data-action="ul"><span data-tooltip title="Neuspořádaný seznam" class="icon-list-ul"></span></div>
+									<div class="btn btn-small" data-action="ol"><span data-tooltip title="Uspořádaný seznam" class="icon-list-ol"></span></div>
+									<div class="btn btn-small" data-action="link"><span data-tooltip title="Odkaz" class="icon-link"></span></div>
+								</div>
+							</div>
+							<div class="form-control text-editor" contenteditable="true">{$control->value}</div>
+
+							{input $name rows=>8, type=>'hidden', class=>array_merge(array('form-control', 'text-editor-hidden'), (array)$control->controlPrototype->class)}
+						</div>
+					{/#}
 				{else}
 					{#control}
 					{label $name, class => 'control-label' /}

@@ -19,4 +19,9 @@ class Form extends NForm {
 			->setAttribute('class', 'span6')
 			->setAttribute('rows', 10);
 	}
+
+	public function addTextEditor($name, $label)
+	{
+		return $this[$name] = new TextEditor($label);
+	}
 }
