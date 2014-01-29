@@ -8,7 +8,7 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th n:if="$user->isAllowed('project', 'edit')">Akce</th>
+			<th>Akce</th>
 			<th>Projekt</th>
 			<th>Vlastník</th>
 			<th>Popis</th>
@@ -18,10 +18,11 @@
 	</thead>
 	<tbody>
 		<tr n:foreach="$projects as $pr">
-			<td n:if="$user->isAllowed('project', 'edit')">
+			<td>
 				<div class="btn-group">
-					<a class="btn btn-mini btn-warning" n:href="Projects:edit $pr->id"><span class="icon-pencil" data-tooltip title="Upravit projekt {$pr->name}"></span></a>
-					<a class="btn btn-mini btn-danger" n:href="delete! $pr->id" data-confirm="Opravdu chcete smazat projekt {$pr->name}?"><span class="icon-remove" data-tooltip title="Odstranit projekt {$pr->name}"></span></a>
+					<a n:tag-if="$user->isAllowed('project', 'view')" class="btn btn-mini btn-success" n:href=":Project:Dashboard:default projectId => $pr->id"><span class="icon-eye-open" data-tooltip title="Detail projektu {$pr->name}"></span></a>
+					<a n:tag-if="$user->isAllowed('project', 'edit')" class="btn btn-mini btn-warning" n:href="Projects:edit $pr->id"><span class="icon-pencil" data-tooltip title="Upravit projekt {$pr->name}"></span></a>
+					<a n:tag-if="$user->isAllowed('project', 'delete')" class="btn btn-mini btn-danger" n:href="delete! $pr->id" data-confirm="Opravdu chcete smazat projekt {$pr->name}?"><span class="icon-remove" data-tooltip title="Odstranit projekt {$pr->name}"></span></a>
 				</div>
 			</td>
 			<td>{include #project, project => $pr}</td>

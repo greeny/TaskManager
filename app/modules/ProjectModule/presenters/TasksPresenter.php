@@ -77,5 +77,12 @@ class TasksPresenter extends BaseProjectPresenter {
 	{
 
 	}
+
+	public function handleDelete($id)
+	{
+		$this->taskFacade->deleteTask($id);
+		$this->flashSuccess('Úkol byl odstraněn.');
+		$this->redirect('Tasks:list');
+	}
 }
  

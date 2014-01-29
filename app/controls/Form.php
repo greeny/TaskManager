@@ -22,6 +22,7 @@ class Form extends NForm {
 
 	public function addTextEditor($name, $label)
 	{
-		return $this[$name] = new TextEditor($label);
+		return $this->addTextArea($name, $label)
+			->setAttribute('class', 'redactor');
 	}
 }

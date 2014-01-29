@@ -62,6 +62,12 @@ class TaskFacade extends Facade {
 		return TRUE;
 	}
 
+	public function deleteTask($id)
+	{
+		$row = $this->tasks->find($id);
+		if($row) $row->delete();
+	}
+
 	/*public function __construct(Tasks $tasks, Categories $categories, Projects $projects, Users $users, Groups $groups, TaskUsers $taskUsers, TaskComments $taskComments)
 	{
 		$this->tasks = $tasks;

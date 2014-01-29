@@ -47,4 +47,19 @@ class Task extends ActiveRow {
 	{
 		return $this->related('task_comments', 'task_id')->order('time DESC');
 	}
+
+	public function getLabels()
+	{
+		$labels = $this->related('task_labels', 'task_id');
+		$return = array();
+		foreach($labels as $label) {
+			$return[] = $label->ref('labels', 'label_id');
+		}
+		return $return;
+	}
+
+	public function getSubtasks()
+	{
+		return $this->related('subtasks', 'task_id');
+	}
 }

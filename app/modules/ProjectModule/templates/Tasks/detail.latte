@@ -1,4 +1,42 @@
 {#content}
 <div class="page-header">
 	<h1>Detail úkolu <abbr data-tooltip title="/{$folderTree->find($task->folder_id)->getPath()}/{$task->name}">{$task->name}</abbr></h1>
+	<div n:if="$user->isAllowed('task', 'edit')" class="btn-group pull-left">
+		<a class="btn btn-mini btn-warning" n:href=":Project:Tasks:edit $task->id"><span class="icon-pencil" data-tooltip title="Upravit úkol {$task->name}"></span></a>
+		<a class="btn btn-mini btn-danger" n:href="delete!" data-confirm="Opravdu chcete smazat úkol {$task->name}?"><span class="icon-remove" data-tooltip title="Odstranit úkol {$task->name}"></span></a>
+	</div>
 </div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<td><b>Datum přidání úkolu</b></td>
+			<td>{$task->time|time}</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><b>Zadavatel</b></td>
+			<td>{include #user, user => $task->owner}</td>
+		</tr>
+		<tr>
+			<td><b>Značky</b></td>
+			<td>
+				{var $labels = $task->labels}
+				{if count($labels)}
+					{foreach $task->labels as $label}
+						{include #label, label => $label}{sep}, {/sep}
+					{/foreach}
+				{else}
+					-
+				{/if}
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+{$task->description|texy}
+
+{foreach $task->subtasks as $subtask}
+	{include #subtask, subtask => $subtask}<br>
+{/foreach}

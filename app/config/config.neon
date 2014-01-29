@@ -30,6 +30,7 @@ database:
 			taskUsers: TaskManager\Model\TaskUser
 			notifications: TaskManager\Model\Notification
 			users: TaskManager\Model\User
+			subtasks: TaskManager\Model\Subtask
 		defaultClass: TaskManager\Model\ActiveRow
 
 services:
@@ -45,6 +46,7 @@ services:
 	- TaskManager\Model\TaskUsers
 	- TaskManager\Model\TaskAccess
 	- TaskManager\Model\TaskComments
+	- TaskManager\Model\Subtasks
 	- TaskManager\Model\Notifications
 
 	## facades ##

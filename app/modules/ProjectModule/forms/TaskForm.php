@@ -19,7 +19,7 @@ class TaskForm extends BaseForm {
 			->setRequired('Prosím zadejte jméno úkolu.')
 			->setOption('description', 'Cesta: '.$this->path);
 
-		$form->addTextArea('description', 'Popis');
+		$form->addTextEditor('description', 'Popis');
 
 		$form->addSelect('access_type', 'Přístup', array(
 			Task::ACCESS_PUBLIC => 'Veřejný - je potřeba pouze přihlášení.',

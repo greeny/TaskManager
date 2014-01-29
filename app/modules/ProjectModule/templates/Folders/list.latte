@@ -23,8 +23,9 @@
 		<tr n:foreach="$tasks as $task">
 			<td>
 				<div class="btn-group">
-					<a n:href="Tasks:edit id => $task->id" class="btn btn-mini btn-warning"><span class="icon-pencil" data-tooltip title="Upravit úkol {$task->name}"></span></a>
-					<a n:href="delete! id => $task->id" class="btn btn-mini btn-danger" data-confirm="Opravdu chcete odstranit úkol {$task->name}?"><span class="icon-remove" data-tooltip title="Odstranit úkol {$task->name}"></span></a>
+					<a n:tag-if="$user->isAllowed('task', 'view')" n:href="Tasks:detail id => $task->id" class="btn btn-mini btn-success"><span class="icon-eye-open" data-tooltip title="Detail úkolu {$task->name}"></span></a>
+					<a n:tag-if="$user->isAllowed('task', 'edit')" n:href="Tasks:edit id => $task->id" class="btn btn-mini btn-warning"><span class="icon-pencil" data-tooltip title="Upravit úkol {$task->name}"></span></a>
+					<a n:tag-if="$user->isAllowed('task', 'delete')" n:href="delete! id => $task->id" class="btn btn-mini btn-danger" data-confirm="Opravdu chcete odstranit úkol {$task->name}?"><span class="icon-remove" data-tooltip title="Odstranit úkol {$task->name}"></span></a>
 				</div>
 			</td>
 			<td>{include #task, task => $task}</td>
